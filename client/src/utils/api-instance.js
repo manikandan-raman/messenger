@@ -1,20 +1,25 @@
-import { API_BASE_URL } from "./constant";
+import { API_BASE_URL, PUBLIC_API_ENDPOINTS } from "./constant";
 import axios from "axios";
+import cookie from "js-cookie";
+
+const token = cookie.get("token");
 
 export const httpCall = {
   post: async (endpoint, { data }) => {
+    PUBLIC_API_ENDPOINTS.includes(endpoint);
     return await axios.post(`${API_BASE_URL}/api/${endpoint}`, data, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDhkNjliNWE4OWJjZTNlZWZjMTIxZSIsImlhdCI6MTcwODc5NDIzNCwiZXhwIjoxNzA4ODgwNjM0fQ._9LOUWg-CDKuReksSUitGueJkPcgawCtMU9hMzRGCDw`,
+        ...{ "Content-Type": "application/json" },
+        ...(!PUBLIC_API_ENDPOINTS.includes(endpoint) && {
+          Authorization: `Bearer ${token}`,
+        }),
       },
     });
   },
   get: async (endpoint) => {
     return await axios.get(`${API_BASE_URL}/api/${endpoint}`, {
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDhkNjliNWE4OWJjZTNlZWZjMTIxZSIsImlhdCI6MTcwODc5NDIzNCwiZXhwIjoxNzA4ODgwNjM0fQ._9LOUWg-CDKuReksSUitGueJkPcgawCtMU9hMzRGCDw",
+        Authorization: `Bearer ${token}`,
       },
     });
   },
