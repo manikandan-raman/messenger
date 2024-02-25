@@ -1,0 +1,10 @@
+.env
+.env-local
+
+node_modules
+
+dist
+
+.parcel_cache/
+
+.DS_Store
