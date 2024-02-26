@@ -7,7 +7,7 @@ import { useSocket } from "../contexts/SocketContext";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { httpCall } from "../utils/api-instance";
 
-const ChatDetailFooter = ({ selectedUserId }) => {
+const ChatDetailFooter = ({ selectedUser }) => {
   const [message, setMessage] = useState("");
   const { socket } = useSocket();
   const { currentUser } = useCurrentUser();
@@ -23,10 +23,13 @@ const ChatDetailFooter = ({ selectedUserId }) => {
     minute: "2-digit",
   });
 
-  const sendMessage = async () => {
+  const sendMessage = async (event = undefined) => {
+    if (event && event.key !== "Enter") {
+      return;
+    }
     const newMessage = {
       sender: currentUser._id,
-      receiver: selectedUserId,
+      receiver: selectedUser._id,
       content: message,
       date: currentDate,
       time: currentTime,
@@ -46,8 +49,9 @@ const ChatDetailFooter = ({ selectedUserId }) => {
         placeholder="Enter message"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => sendMessage(e)}
       />
-      {!message ? (
+      {false ? (
         <img
           className="size-10 basis-[5%] bg-teal-500 rounded-full py-1"
           src={RecorderSvg}

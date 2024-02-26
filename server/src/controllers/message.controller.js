@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { Message } from "../models/message.model.js";
 
 export const addMessage = async (req, res) => {
@@ -12,16 +13,13 @@ export const addMessage = async (req, res) => {
 
 export const getAllMessagesByUser = async (req, res) => {
   try {
-    const id = req.params.id;
-    // const messages = await Message.find({
-    //   $or: [{ sender: id }, { receiver: id }],
-    // })
-    //   .populate([
-    //     { path: "sender", model: "User", select: ["_id", "name"] },
-    //     { path: "receiver", model: "User", select: ["_id", "name"] },
-    //   ])
-    //   .exec();
+    const id = new Types.ObjectId(req.params.id);
     const messages = await Message.aggregate([
+      {
+        $match: {
+          $or: [{ sender: id }, { receiver: id }],
+        },
+      },
       {
         $lookup: {
           from: "users",

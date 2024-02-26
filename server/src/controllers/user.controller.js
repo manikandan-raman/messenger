@@ -6,6 +6,8 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const getUserById = async (req, res) => {
-  const user = await User.findById(req.params.id);
-  res.json({ user });
+  const user = await User.findById(req.params.id)
+    .populate("contacts")
+    .sort({ createdAt: -1 });
+  res.json({ user: user.contacts });
 };

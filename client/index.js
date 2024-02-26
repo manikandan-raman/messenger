@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./src/App";
-import { QueryClient } from "@tanstack/query-core";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./src/pages/Login";
 import { CurrentUserProvider } from "./src/contexts/CurrentUserContext";

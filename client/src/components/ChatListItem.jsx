@@ -3,12 +3,12 @@ import AvatarSvg from "../../public/assets/avatar.svg";
 import { useChat } from "../contexts/ChatContext";
 
 const ChatListItem = ({ user }) => {
-  const { setSelectedUserId } = useChat();
+  const { setSelectedUser } = useChat();
 
   return (
     <div
       className="rounded-sm cursor-pointer hover:bg-gray-200"
-      onClick={() => setSelectedUserId(user._id)}
+      onClick={() => setSelectedUser(user)}
     >
       <div className="p-2 flex items-center gap-2">
         <img

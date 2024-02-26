@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import ChatList from "./ChatList";
 import MenuSvg from "../../public/assets/menu.svg";
+import { useSocket } from "../contexts/SocketContext";
+import cookie from "js-cookie";
+import { useCurrentUser } from "../contexts/CurrentUserContext";
+import { useNavigate } from "react-router-dom";
 
 const ChatSideBar = () => {
+  const [showMenu, setShowMenu] = useState(false);
+  const { socket } = useSocket();
+  const { currentUser } = useCurrentUser();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    socket.emit("user_disconnected", currentUser._id);
+    socket.disconnect();
+    cookie.remove("token");
+    cookie.remove("currentUserId");
+    navigate("/login");
+  };
   return (
     <>
       <div className="basis-2/6 px-2 bg-gray-50 overflow-y-scroll">
@@ -15,8 +30,21 @@ const ChatSideBar = () => {
             />
             <h2 className="text-xl">MyApp</h2>
           </div>
-          <div>
-            <img className="size-6" src={MenuSvg} alt="menu" />
+          <div className="relative">
+            <img
+              className="size-6 cursor-pointer"
+              src={MenuSvg}
+              alt="menu"
+              onClick={() => setShowMenu(!showMenu)}
+            />
+            {showMenu && (
+              <div
+                className="absolute bg-red-100 py-2 px-8 right-4 text-center cursor-pointer"
+                onClick={handleLogout}
+              >
+                Logout
+              </div>
+            )}
           </div>
         </div>
         <div className="search-chat flex justify-between items-center p-4 gap-2">

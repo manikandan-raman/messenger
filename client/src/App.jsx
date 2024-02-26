@@ -19,6 +19,11 @@ const App = () => {
           user_id: currentUser._id,
           socket_id: socket.id,
         });
+
+        socket.emit("is-online", {
+          user_id: currentUser._id,
+          online_status: true,
+        });
       }
     });
 
