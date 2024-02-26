@@ -1,43 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import React, { useEffect } from "react";
 import ChatDetail from "./components/ChatDetail";
 import ChatSideBar from "./components/ChatSideBar";
 import { ChatProvider } from "./contexts/ChatContext";
-
-const socket = io("ws://localhost:5000", {
-  autoConnect: false,
-  reconnection: false,
-});
+import { useSocket } from "./contexts/SocketContext";
+import { useCurrentUser } from "./contexts/CurrentUserContext";
 
 const App = () => {
-  const [message, setMessage] = useState("");
-  const [allMessages, setAllMessages] = useState([]);
-  const [roomName, setRoomName] = useState("");
-  const [joined, setJoined] = useState(false);
+  const { socket } = useSocket();
+  const { currentUser } = useCurrentUser();
 
   useEffect(() => {
     socket.connect();
 
     socket.on("connect", () => {
       console.log(`Socket Id: ${socket.id}`);
+      if (currentUser._id && socket.id) {
+        socket.emit("user_connected", {
+          user_id: currentUser._id,
+          socket_id: socket.id,
+        });
+      }
     });
 
-    socket.on("received_message", (message) => {
-      setAllMessages((state) => [...state, message]);
-    });
-
-    return () => socket.disconnect();
+    return () => {
+      socket.emit("user_disconnected", currentUser._id);
+      socket.disconnect();
+    };
   }, []);
-
-  const joinRoom = () => {
-    socket.emit("join_room", roomName);
-    setJoined(true);
-  };
-
-  const sendMessage = () => {
-    socket.emit("new_message", { roomName, message });
-    setMessage("");
-  };
 
   return (
     <ChatProvider>

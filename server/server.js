@@ -15,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const server = createServer(app);
+const connectedUsers = new Map();
 
 const io = new Server(server, {
   cors: {
@@ -24,14 +25,20 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("Socket Id: " + socket.id);
-
-  socket.on("join_room", (room) => {
-    socket.join(room);
+  socket.on("user_connected", ({ user_id, socket_id }) => {
+    connectedUsers.set(user_id, socket_id);
+    console.log(connectedUsers);
   });
 
-  socket.on("new_message", ({ roomName, message }) => {
-    socket.to(roomName).emit("received_message", message);
+  socket.on("new_message", (message) => {
+    console.log({ newmessage: message });
+    socket
+      .to(connectedUsers.get(message.receiver))
+      .emit("received_message", message);
+  });
+
+  socket.on("user_disconnected", (user_id) => {
+    connectedUsers.delete(user_id);
   });
 
   socket.on("disconnect", () => {

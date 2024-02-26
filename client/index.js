@@ -6,6 +6,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./src/pages/Login";
 import { CurrentUserProvider } from "./src/contexts/CurrentUserContext";
+import { SocketProvider } from "./src/contexts/SocketContext";
 
 const element = document.getElementById("chat");
 
@@ -30,8 +31,10 @@ const queryClient = new QueryClient();
 
 root.render(
   <QueryClientProvider client={queryClient}>
-    <CurrentUserProvider>
-      <RouterProvider router={routerProvider} />
-    </CurrentUserProvider>
+    <SocketProvider>
+      <CurrentUserProvider>
+        <RouterProvider router={routerProvider} />
+      </CurrentUserProvider>
+    </SocketProvider>
   </QueryClientProvider>
 );

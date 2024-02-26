@@ -3,8 +3,10 @@ import ChatListItem from "./ChatListItem";
 
 import { useQuery } from "@tanstack/react-query";
 import { httpCall } from "../utils/api-instance";
+import { useCurrentUser } from "../contexts/CurrentUserContext";
 
 const ChatList = () => {
+  const { currentUser } = useCurrentUser();
   const { isLoading, data } = useQuery({
     queryKey: ["usersList"],
     queryFn: async () => {
@@ -18,9 +20,11 @@ const ChatList = () => {
         "Loading..."
       ) : (
         <div>
-          {data.users.map((user) => (
-            <ChatListItem key={user._id} user={user} />
-          ))}
+          {data.users
+            .filter((user) => user._id !== currentUser._id)
+            .map((user) => (
+              <ChatListItem key={user._id} user={user} />
+            ))}
         </div>
       )}
     </div>

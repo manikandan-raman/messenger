@@ -1,14 +1,14 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 
 export const ChatContext = createContext({});
 
 export const ChatProvider = ({ children }) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
-  return (
-    <ChatContext.Provider value={{ selectedUserId, setSelectedUserId }}>
-      {children}
-    </ChatContext.Provider>
+  const value = useMemo(
+    () => ({ selectedUserId, setSelectedUserId }),
+    [selectedUserId]
   );
+  return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };
 
 export const useChat = () => useContext(ChatContext);

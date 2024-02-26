@@ -72,7 +72,7 @@ export const getAllMessagesByUser = async (req, res) => {
         },
       },
       {
-        $sort: { createdAt: 1 },
+        $sort: { date: 1 },
       },
     ]).exec();
     return res.json({ data: messages });
