@@ -4,10 +4,15 @@ import ChatSideBar from "./components/ChatSideBar";
 import { ChatProvider } from "./contexts/ChatContext";
 import { useSocket } from "./contexts/SocketContext";
 import { useCurrentUser } from "./contexts/CurrentUserContext";
+import { Navigate } from "react-router-dom";
 
 const App = () => {
   const { socket } = useSocket();
   const { currentUser } = useCurrentUser();
+
+  if (!currentUser?._id) {
+    return <Navigate to="/login" />;
+  }
 
   useEffect(() => {
     socket.connect();
@@ -28,8 +33,10 @@ const App = () => {
     });
 
     return () => {
-      socket.emit("user_disconnected", currentUser._id);
-      socket.disconnect();
+      if (currentUser?._id) {
+        socket.emit("user_disconnected", currentUser._id);
+        socket.disconnect();
+      }
     };
   }, []);
 

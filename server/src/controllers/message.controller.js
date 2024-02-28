@@ -13,11 +13,17 @@ export const addMessage = async (req, res) => {
 
 export const getAllMessagesByUser = async (req, res) => {
   try {
-    const id = new Types.ObjectId(req.params.id);
+    const receiver = new Types.ObjectId(req.params.receiver_id);
+    const sender = new Types.ObjectId(req.params.sender_id);
     const messages = await Message.aggregate([
       {
         $match: {
-          $or: [{ sender: id }, { receiver: id }],
+          $or: [
+            {
+              $and: [{ sender }, { receiver }],
+            },
+            { $and: [{ sender: receiver }, { receiver: sender }] },
+          ],
         },
       },
       {
@@ -74,6 +80,17 @@ export const getAllMessagesByUser = async (req, res) => {
       },
     ]).exec();
     return res.json({ data: messages });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateMessage = async (req, res) => {
+  try {
+    let message = Message.findOne(req.params.message_id);
+    message.read = true;
+    message = await message.save();
+    return res.json({ message });
   } catch (error) {
     console.error(error);
   }

@@ -16,11 +16,13 @@ const ChatListItem = ({ user }) => {
           src={AvatarSvg}
           alt="avatar"
         />
-        <div className="basis-[80%]">
+        <div className="basis-[67%]">
           <p>{user?.name}</p>
-          <p className="line-clamp-1">{user?.email}</p>
+          <p className="line-clamp-1">
+            {user?.last_message?.content || "Yet to message"}
+          </p>
         </div>
-        <p className="basis-[5%]">10:00am</p>
+        <p className="basis-[18%]">{user?.last_message?.time}</p>
       </div>
     </div>
   );

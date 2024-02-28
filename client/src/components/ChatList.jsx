@@ -20,7 +20,7 @@ const ChatList = () => {
         "Loading..."
       ) : (
         <div>
-          {data.user.map((user) => (
+          {data?.user.map((user) => (
             <ChatListItem key={user._id} user={user} />
           ))}
         </div>

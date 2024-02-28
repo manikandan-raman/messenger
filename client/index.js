@@ -24,6 +24,10 @@ const routerProvider = createBrowserRouter([
     path: "/chats",
     element: <App />,
   },
+  {
+    path: "/chats/:receiver_id",
+    element: <App />,
+  },
 ]);
 
 const queryClient = new QueryClient();

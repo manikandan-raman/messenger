@@ -6,11 +6,13 @@ import SendSvg from "../../public/assets/send.svg";
 import { useSocket } from "../contexts/SocketContext";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { httpCall } from "../utils/api-instance";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 const ChatDetailFooter = ({ selectedUser }) => {
   const [message, setMessage] = useState("");
   const { socket } = useSocket();
   const { currentUser } = useCurrentUser();
+  const queryClient = useQueryClient();
   const date = new Date();
   const currentDate = date.toLocaleDateString("zh-Hans-CN", {
     year: "numeric",
@@ -21,6 +23,20 @@ const ChatDetailFooter = ({ selectedUser }) => {
     hour12: true,
     hour: "2-digit",
     minute: "2-digit",
+  });
+
+  const sendMessageMutation = useMutation({
+    mutationKey: "sendMessage",
+    mutationFn: async (newMessage) => {
+      return await httpCall.post("message", { data: newMessage });
+    },
+    onSettled: async () =>
+      Promise.all([
+        await queryClient.refetchQueries({ queryKey: ["usersList"] }),
+        await queryClient.refetchQueries({
+          queryKey: ["userMessages", { id: selectedUser?._id }],
+        }),
+      ]),
   });
 
   const sendMessage = async (event = undefined) => {
@@ -34,7 +50,8 @@ const ChatDetailFooter = ({ selectedUser }) => {
       date: currentDate,
       time: currentTime,
     };
-    await httpCall.post("message", { data: newMessage });
+    sendMessageMutation.mutate(newMessage);
+    // await httpCall.post("message", { data: newMessage });
     socket.emit("new_message", newMessage);
     setMessage("");
   };

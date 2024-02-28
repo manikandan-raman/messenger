@@ -3,29 +3,46 @@ import ChatDetailHeader from "./ChatDetailHeader";
 import ChatDetailFooter from "./ChatDetailFooter";
 import MessageList from "./MessageList";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useChat } from "../contexts/ChatContext";
 import { httpCall } from "../utils/api-instance";
 import { useSocket } from "../contexts/SocketContext";
+import { useCurrentUser } from "../contexts/CurrentUserContext";
 
 const ChatDetail = () => {
   const { selectedUser } = useChat();
   const { socket } = useSocket();
-  const queryClient = useQueryClient();
+  const { currentUser } = useCurrentUser();
 
-  const { data: messagesList } = useQuery({
-    queryKey: ["userMessages", selectedUser?._id],
+  const { data: messagesList, refetch: refetchMessages } = useQuery({
+    queryKey: ["userMessages", { id: selectedUser?._id }],
     queryFn: async () => {
-      return (await httpCall.get(`message/${selectedUser?._id}`)).data;
+      return (
+        selectedUser?._id
+          ? await httpCall.get(
+              `message/${selectedUser?._id}/${currentUser?._id}`
+            )
+          : resolve([])
+      ).data;
     },
-    enabled: !!selectedUser?._id,
+  });
+
+  const updateMessageRead = useMutation({
+    mutationKey: ["updateMessageRead"],
+    mutationFn: async (read) => {
+      return await httpCall.patch("message", { read });
+    },
+    onSettled: async () => await refetchMessages(),
   });
 
   useEffect(() => {
     socket.on("received_message", (message) => {
-      queryClient.invalidateQueries({
-        queryKey: ["userMessages", selectedUser?._id],
-      });
+      (async function () {
+        // if (socket.connected) {
+        //   updateMessageRead.mutate({ read: true });
+        // }
+        await refetchMessages();
+      })();
     });
   }, [socket]);
 

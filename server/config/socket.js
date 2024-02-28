@@ -20,9 +20,18 @@ export function initializeSocket(server) {
     });
 
     socket.on("new_message", (message) => {
-      console.log({ newmessage: message });
+      console.log({
+        newmessage: message,
+        users: [
+          connectedUsers.get(message.receiver),
+          connectedUsers.get(message.sender),
+        ],
+      });
       socket
-        .to(connectedUsers.get(message.receiver))
+        .to([
+          connectedUsers.get(message.receiver),
+          connectedUsers.get(message.sender),
+        ])
         .emit("received_message", message);
     });
 

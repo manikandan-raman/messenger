@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import MessageDetail from "./MessageDetail";
 
 const ChatDetailMessageList = ({ messagesList }) => {
+  const lastChatRef = useRef(null);
+  useEffect(() => {
+    lastChatRef.current.scrollIntoView({
+      behaviour: "smooth",
+    });
+  }, [messagesList]);
   return (
-    <div className="pb-10">
+    <div className="pb-16">
       {messagesList &&
         messagesList.map((messages, index) => (
           <MessageDetail
@@ -12,6 +18,7 @@ const ChatDetailMessageList = ({ messagesList }) => {
             messages={messages.messages}
           />
         ))}
+      <div ref={lastChatRef}></div>
     </div>
   );
 };
