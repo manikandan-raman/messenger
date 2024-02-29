@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./src/pages/Login";
 import { CurrentUserProvider } from "./src/contexts/CurrentUserContext";
 import { SocketProvider } from "./src/contexts/SocketContext";
+import Registration from "./src/pages/Registration";
 
 const element = document.getElementById("chat");
 
@@ -19,6 +20,10 @@ const routerProvider = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/registration",
+    element: <Registration />,
   },
   {
     path: "/chats",

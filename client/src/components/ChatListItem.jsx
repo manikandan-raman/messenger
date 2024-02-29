@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import AvatarSvg from "../../public/assets/avatar.svg";
 import { useChat } from "../contexts/ChatContext";
 

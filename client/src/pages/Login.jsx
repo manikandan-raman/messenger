@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { httpCall } from "../utils/api-instance";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import cookie from "js-cookie";
 
@@ -23,7 +23,7 @@ const Login = () => {
       cookie.set("currentUserId", response.data.user._id);
       setTimeout(() => {
         navigate("/chats");
-      }, 150);
+      }, 250);
     }
   };
   return (

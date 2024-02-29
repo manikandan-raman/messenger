@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import ChatList from "./ChatList";
 import MenuSvg from "../../public/assets/menu.svg";
+import NewContactSvg from "../../public/assets/new-contact.svg";
 import { useSocket } from "../contexts/SocketContext";
 import cookie from "js-cookie";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { useNavigate } from "react-router-dom";
+import AllUsersList from "./AllUsersList";
 
 const ChatSideBar = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [showAllUsers, setShowAllUsers] = useState(false);
   const { socket } = useSocket();
   const { currentUser } = useCurrentUser();
   const navigate = useNavigate();
@@ -30,21 +33,33 @@ const ChatSideBar = () => {
             />
             <h2 className="text-xl">MyApp</h2>
           </div>
-          <div className="relative">
+          <div className="flex gap-4">
             <img
-              className="size-6 cursor-pointer"
-              src={MenuSvg}
-              alt="menu"
-              onClick={() => setShowMenu(!showMenu)}
+              className="size-7 cursor-pointer"
+              src={NewContactSvg}
+              alt="new_contact"
+              onClick={() => {
+                setShowAllUsers(!showAllUsers);
+                setShowMenu(false);
+              }}
+              title="All users"
             />
-            {showMenu && (
-              <div
-                className="absolute bg-red-100 py-2 px-8 right-4 text-center cursor-pointer"
-                onClick={handleLogout}
-              >
-                Logout
-              </div>
-            )}
+            <div className="relative">
+              <img
+                className="size-6 cursor-pointer"
+                src={MenuSvg}
+                alt="menu"
+                onClick={() => setShowMenu(!showMenu)}
+              />
+              {showMenu && (
+                <div
+                  className="absolute bg-red-100 py-2 px-8 right-4 text-center cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="search-chat flex justify-between items-center p-4 gap-2">
@@ -62,7 +77,11 @@ const ChatSideBar = () => {
           />
         </div>
         <div>
-          <ChatList />
+          {showAllUsers ? (
+            <AllUsersList setShowAllUsers={setShowAllUsers} />
+          ) : (
+            <ChatList />
+          )}
         </div>
       </div>
     </>

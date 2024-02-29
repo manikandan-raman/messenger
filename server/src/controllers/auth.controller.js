@@ -3,11 +3,13 @@ import { generateToken } from "../../utils/generateToken.js";
 
 export const signUp = async (req, res) => {
   try {
+    console.log(req.body);
     let user = new User(req.body);
     user = await user.save();
-    res.json({ user });
+    return res.status(201).json({ user });
   } catch (error) {
     console.error(error);
+    return res.status(400).json({ message: "Bad Request" });
   }
 };
 

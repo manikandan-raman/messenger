@@ -40,5 +40,17 @@ export const getUserById = async (req, res) => {
     });
   }
 
-  res.json({ user: response });
+  return res.json({ user: response });
+};
+
+export const checkUserNameExists = async (req, res) => {
+  const user = await User.findOne({ username: req.query.username });
+  res.json({ isAvailable: !!user?.username });
+};
+
+export const addContactToUser = async (req, res) => {
+  const user = await User.findById(req.params.user_id);
+  user.contacts = [...user.contacts, req.params.contact_id];
+  await user.save();
+  res.json({ user });
 };
