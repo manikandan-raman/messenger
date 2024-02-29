@@ -7,10 +7,11 @@ import { useCurrentUser } from "../contexts/CurrentUserContext";
 
 const ChatList = () => {
   const { currentUser } = useCurrentUser();
+
   const { isLoading, data } = useQuery({
     queryKey: ["usersList"],
     queryFn: async () => {
-      return (await httpCall.get(`user/${currentUser._id}`)).data;
+      return (await httpCall.get(`user/contacts/${currentUser._id}`)).data;
     },
   });
 

@@ -4,6 +4,7 @@ import {
   checkUserNameExists,
   getAllUsers,
   getUserById,
+  getContactsById,
 } from "../controllers/user.controller.js";
 import protectRoute from "../middlewares/auth.middleware.js";
 
@@ -12,6 +13,7 @@ const router = Router();
 router.get("/is-available", checkUserNameExists);
 router.get("/", protectRoute, getAllUsers);
 router.get("/:id", protectRoute, getUserById);
+router.get("/contacts/:id", protectRoute, getContactsById);
 router.patch(
   "/:user_id/addcontact/:contact_id",
   protectRoute,

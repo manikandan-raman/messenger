@@ -7,6 +7,11 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const getUserById = async (req, res) => {
+  const user = await User.findOne({ _id: req.params.id });
+  res.json({ user });
+};
+
+export const getContactsById = async (req, res) => {
   const id = req.params.id;
   const user = await User.findById(id)
     .populate("contacts", "-password")
@@ -49,8 +54,12 @@ export const checkUserNameExists = async (req, res) => {
 };
 
 export const addContactToUser = async (req, res) => {
-  const user = await User.findById(req.params.user_id);
-  user.contacts = [...user.contacts, req.params.contact_id];
-  await user.save();
-  res.json({ user });
+  const { user_id, contact_id } = req.params;
+  const user = await User.findById(user_id);
+  if (!user.contacts.includes(contact_id)) {
+    user.contacts = [...user.contacts, contact_id];
+    await user.save();
+  }
+  const addedContact = await User.findById(contact_id);
+  res.json({ user: addedContact });
 };

@@ -7,6 +7,7 @@ import Login from "./src/pages/Login";
 import { CurrentUserProvider } from "./src/contexts/CurrentUserContext";
 import { SocketProvider } from "./src/contexts/SocketContext";
 import Registration from "./src/pages/Registration";
+import { ChatProvider } from "./src/contexts/ChatContext";
 
 const element = document.getElementById("chat");
 
@@ -28,10 +29,12 @@ const routerProvider = createBrowserRouter([
   {
     path: "/chats",
     element: <App />,
+    errorElement: <div>Something went wrong</div>,
   },
   {
     path: "/chats/:receiver_id",
     element: <App />,
+    errorElement: <div>Something went wrong</div>,
   },
 ]);
 
@@ -41,7 +44,9 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <SocketProvider>
       <CurrentUserProvider>
-        <RouterProvider router={routerProvider} />
+        <ChatProvider>
+          <RouterProvider router={routerProvider} />
+        </ChatProvider>
       </CurrentUserProvider>
     </SocketProvider>
   </QueryClientProvider>

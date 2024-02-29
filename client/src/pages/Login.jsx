@@ -18,7 +18,7 @@ const Login = () => {
       },
     });
     if (response.data.token) {
-      setCurrentUser({ _id: response.data.user._id });
+      setCurrentUser(response.data.user);
       cookie.set("token", response.data.token, { secure: true });
       cookie.set("currentUserId", response.data.user._id);
       setTimeout(() => {

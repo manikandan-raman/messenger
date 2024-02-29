@@ -1,18 +1,26 @@
 import React, { useEffect } from "react";
 import ChatDetail from "./components/ChatDetail";
 import ChatSideBar from "./components/ChatSideBar";
-import { ChatProvider } from "./contexts/ChatContext";
+import { useChat } from "./contexts/ChatContext";
 import { useSocket } from "./contexts/SocketContext";
 import { useCurrentUser } from "./contexts/CurrentUserContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
+import { useGetUserById } from "./hooks/useGetUserById";
 
 const App = () => {
   const { socket } = useSocket();
   const { currentUser } = useCurrentUser();
+  const { setSelectedUser } = useChat();
+  const { receiver_id } = useParams();
+  const { data } = useGetUserById(receiver_id);
 
   if (!currentUser?._id) {
     return <Navigate to="/login" />;
   }
+
+  useEffect(() => {
+    setSelectedUser(data?.user);
+  }, [data?.user]);
 
   useEffect(() => {
     socket.connect();
@@ -41,14 +49,12 @@ const App = () => {
   }, []);
 
   return (
-    <ChatProvider>
-      <div className="h-screen w-screen bg-blue-500">
-        <div className="p-6 flex h-full z-10">
-          <ChatSideBar />
-          <ChatDetail />
-        </div>
+    <div className="h-screen w-screen bg-blue-500">
+      <div className="p-6 flex h-full z-10">
+        <ChatSideBar />
+        <ChatDetail />
       </div>
-    </ChatProvider>
+    </div>
   );
 };
 

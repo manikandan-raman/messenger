@@ -1,10 +1,14 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import React from "react";
 import { httpCall } from "../utils/api-instance";
 import AvatarSvg from "../../public/assets/avatar.svg";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
+import { useChat } from "../contexts/ChatContext";
 
 const AllUsersList = ({ setShowAllUsers }) => {
+  const navigate = useNavigate();
+  const { setSelectedUser } = useChat();
   const { currentUser } = useCurrentUser();
   const { isLoading, data } = useQuery({
     queryKey: ["allUsersList"],
@@ -21,6 +25,8 @@ const AllUsersList = ({ setShowAllUsers }) => {
 
     if (response.data.user._id) {
       setShowAllUsers(false);
+      setSelectedUser(response.data.user);
+      navigate(`/chats/${response.data.user._id}`);
     }
   };
 
@@ -39,15 +45,20 @@ const AllUsersList = ({ setShowAllUsers }) => {
                   alt="avatar"
                 />
                 <div className="basis-[65%]">
-                  <p>{user?.name}</p>
+                  <p>
+                    {user?.name +
+                      (user._id === currentUser._id ? " (You)" : "")}
+                  </p>
                   <p className="line-clamp-1">User Status Will be Shown Here</p>
                 </div>
-                <button
-                  className="basis-[20%] bg-blue-500 rounded-md text-white p-1"
-                  onClick={() => addContactToUser(user?._id)}
-                >
-                  + Add
-                </button>
+                {!currentUser.contacts.includes(user._id) && (
+                  <button
+                    className="basis-[20%] bg-blue-500 rounded-md text-white p-1"
+                    onClick={() => addContactToUser(user?._id)}
+                  >
+                    + Add
+                  </button>
+                )}
               </div>
             </div>
           ))}

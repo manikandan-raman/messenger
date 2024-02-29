@@ -1,14 +1,21 @@
 import React from "react";
 import AvatarSvg from "../../public/assets/avatar.svg";
 import { useChat } from "../contexts/ChatContext";
+import { useNavigate } from "react-router-dom";
 
 const ChatListItem = ({ user }) => {
   const { setSelectedUser } = useChat();
+  const navigate = useNavigate();
+
+  const openChat = (user) => {
+    setSelectedUser(user);
+    navigate(`/chats/${user._id}`);
+  };
 
   return (
     <div
       className="rounded-sm cursor-pointer hover:bg-gray-200"
-      onClick={() => setSelectedUser(user)}
+      onClick={() => openChat(user)}
     >
       <div className="p-2 flex items-center gap-2">
         <img
