@@ -37,21 +37,24 @@ const AllUsersList = ({ setShowAllUsers }) => {
       ) : (
         <div>
           {data?.users.map((user) => (
-            <div className="rounded-sm cursor-pointer hover:bg-gray-200">
+            <div
+              key={user?._id}
+              className="rounded-sm cursor-pointer hover:bg-gray-200"
+            >
               <div className="p-2 flex items-center gap-2">
                 <img
-                  className="basis-[15%] size-12 my-1 rounded-full bg-red-200"
+                  className="basis-[15%] size-12 my-1 rounded-full"
                   src={AvatarSvg}
                   alt="avatar"
                 />
                 <div className="basis-[65%]">
                   <p>
                     {user?.name +
-                      (user._id === currentUser._id ? " (You)" : "")}
+                      (user._id === currentUser?._id ? " (You)" : "")}
                   </p>
                   <p className="line-clamp-1">User Status Will be Shown Here</p>
                 </div>
-                {!currentUser.contacts.includes(user._id) && (
+                {!currentUser?.contacts?.includes(user._id) && (
                   <button
                     className="basis-[20%] bg-blue-500 rounded-md text-white p-1"
                     onClick={() => addContactToUser(user?._id)}

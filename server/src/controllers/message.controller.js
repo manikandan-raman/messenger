@@ -15,6 +15,8 @@ export const getAllMessagesByUser = async (req, res) => {
   try {
     const receiver = new Types.ObjectId(req.params.receiver_id);
     const sender = new Types.ObjectId(req.params.sender_id);
+    const limit = req.query.limit ?? 8;
+    const skip = req.query.offset ?? 0;
     const messages = await Message.aggregate([
       {
         $match: {
@@ -47,6 +49,15 @@ export const getAllMessagesByUser = async (req, res) => {
       },
       {
         $unwind: "$receiver",
+      },
+      {
+        $sort: { date: -1 },
+      },
+      {
+        $skip: parseInt(skip),
+      },
+      {
+        $limit: parseInt(limit),
       },
       {
         $group: {

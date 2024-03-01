@@ -23,15 +23,15 @@ const ChatSideBar = () => {
   };
   return (
     <>
-      <div className="basis-2/6 px-2 bg-gray-50 overflow-y-scroll">
-        <div className="flex justify-between items-center p-4">
+      <div className="basis-2/6 bg-gray-50 rounded-l-md border-r-2 border-gray-150">
+        <div className="flex justify-between items-center p-4 h-16">
           <div className="flex items-center gap-2">
             <img
               className="size-8"
               src="https://www.svgrepo.com/show/533270/message-square-lines-alt.svg"
               alt=""
             />
-            <h2 className="text-xl">MyApp</h2>
+            <h2 className="text-xl">mChat</h2>
           </div>
           <div className="flex gap-4">
             <img
@@ -52,17 +52,17 @@ const ChatSideBar = () => {
                 onClick={() => setShowMenu(!showMenu)}
               />
               {showMenu && (
-                <div
-                  className="absolute bg-red-100 py-2 px-8 right-4 text-center cursor-pointer"
-                  onClick={handleLogout}
-                >
-                  Logout
+                <div className="absolute z-20 bg-white py-2 px-8 right-4 text-center cursor-pointer rounded-md shadow-md">
+                  <p className="py-1">Settings</p>
+                  <p onClick={handleLogout} className="py-1">
+                    Logout
+                  </p>
                 </div>
               )}
             </div>
           </div>
         </div>
-        <div className="search-chat flex justify-between items-center p-4 gap-2">
+        <div className="search-chat flex justify-between items-center gap-2 p-4 h-16">
           <input
             className="border border-stone-400 px-4 py-2 w-full rounded-md"
             type="text"
@@ -76,7 +76,7 @@ const ChatSideBar = () => {
             alt="filter"
           />
         </div>
-        <div>
+        <div className="overflow-y-scroll h-[calc(100%-8rem)]">
           {showAllUsers ? (
             <AllUsersList setShowAllUsers={setShowAllUsers} />
           ) : (

@@ -1,15 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import MessageDetail from "./MessageDetail";
+import EmojiPicker from "emoji-picker-react";
 
-const ChatDetailMessageList = ({ messagesList }) => {
+const ChatDetailMessageList = ({
+  messagesList,
+  showEmoji,
+  setSelectedEmoji,
+}) => {
   const lastChatRef = useRef(null);
   useEffect(() => {
     lastChatRef.current.scrollIntoView({
       behaviour: "smooth",
     });
-  }, [messagesList]);
+  }, [messagesList, showEmoji]);
   return (
-    <div className="pb-16">
+    <div className="overflow-y-scroll h-[calc(100%-8rem)]">
       {messagesList &&
         messagesList.map((messages, index) => (
           <MessageDetail
@@ -18,6 +23,13 @@ const ChatDetailMessageList = ({ messagesList }) => {
             messages={messages.messages}
           />
         ))}
+      <EmojiPicker
+        className="absolute z-20"
+        onEmojiClick={(e) => setSelectedEmoji(e.emoji)}
+        width={400}
+        height={400}
+        open={showEmoji}
+      />
       <div ref={lastChatRef}></div>
     </div>
   );

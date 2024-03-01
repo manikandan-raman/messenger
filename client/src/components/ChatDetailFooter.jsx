@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PlusSvg from "../../public/assets/plus.svg";
 import SmilieSvg from "../../public/assets/smilie.svg";
 import RecorderSvg from "../../public/assets/recorder.svg";
@@ -8,7 +8,12 @@ import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { httpCall } from "../utils/api-instance";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 
-const ChatDetailFooter = ({ selectedUser }) => {
+const ChatDetailFooter = ({
+  selectedUser,
+  showEmoji,
+  setShowEmoji,
+  selectedEmoji,
+}) => {
   const [message, setMessage] = useState("");
   const { socket } = useSocket();
   const { currentUser } = useCurrentUser();
@@ -25,6 +30,10 @@ const ChatDetailFooter = ({ selectedUser }) => {
     minute: "2-digit",
   });
 
+  useEffect(() => {
+    setMessage((state) => (state += selectedEmoji));
+  }, [selectedEmoji]);
+
   const sendMessageMutation = useMutation({
     mutationKey: "sendMessage",
     mutationFn: async (newMessage) => {
@@ -40,7 +49,8 @@ const ChatDetailFooter = ({ selectedUser }) => {
   });
 
   const sendMessage = async (event = undefined) => {
-    if (event && event.key !== "Enter") {
+    console.log({ event });
+    if (event && event.type === "onKeyDown" && event.key !== "Enter") {
       return;
     }
     const newMessage = {
@@ -50,14 +60,21 @@ const ChatDetailFooter = ({ selectedUser }) => {
       date: currentDate,
       time: currentTime,
     };
+    setShowEmoji(false);
     sendMessageMutation.mutate(newMessage);
     // await httpCall.post("message", { data: newMessage });
     socket.emit("new_message", newMessage);
     setMessage("");
   };
   return (
-    <div className="fixed bottom-6 bg-gray-50 h-16 p-2 flex items-center gap-2 w-[63%]">
+    <div className="bg-gray-50 h-16 p-2 flex items-center gap-2">
       <img className="size-8 basis-[5%]" src={PlusSvg} alt="plus" />
+      <img
+        className="size-8 basis-[5%] cursor-pointer"
+        src={SmilieSvg}
+        alt="smilie-picker"
+        onClick={() => setShowEmoji(!showEmoji)}
+      />
       <input
         className="border border-stone-400 rounded-md p-2 basis-[90%] w-full"
         type="text"

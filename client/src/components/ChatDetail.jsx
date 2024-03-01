@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ChatDetailHeader from "./ChatDetailHeader";
 import ChatDetailFooter from "./ChatDetailFooter";
 import MessageList from "./MessageList";
@@ -8,11 +8,14 @@ import { useChat } from "../contexts/ChatContext";
 import { httpCall } from "../utils/api-instance";
 import { useSocket } from "../contexts/SocketContext";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
+import { useEmoji } from "../contexts/EmojiContext";
 
 const ChatDetail = () => {
   const { selectedUser } = useChat();
   const { socket } = useSocket();
   const { currentUser } = useCurrentUser();
+  const { showEmoji, setShowEmoji, selectedEmoji, setSelectedEmoji } =
+    useEmoji();
 
   const { data: messagesList, refetch: refetchMessages } = useQuery({
     queryKey: ["userMessages", { id: selectedUser?._id }],
@@ -20,7 +23,7 @@ const ChatDetail = () => {
       return (
         selectedUser?._id
           ? await httpCall.get(
-              `message/${selectedUser?._id}/${currentUser?._id}`
+              `message/${selectedUser?._id}/${currentUser?._id}?limit=15&offset=0`
             )
           : resolve([])
       ).data;
@@ -47,12 +50,21 @@ const ChatDetail = () => {
   }, [socket]);
 
   return (
-    <div className="basis-2/3 bg-gray-50 relative overflow-y-scroll">
+    <div className="basis-2/3 relative bg-secondary rounded-r-md">
       {selectedUser?._id ? (
         <>
           <ChatDetailHeader />
-          <MessageList messagesList={messagesList?.data} />
-          <ChatDetailFooter selectedUser={selectedUser} />
+          <MessageList
+            messagesList={messagesList?.data}
+            showEmoji={showEmoji}
+            setSelectedEmoji={setSelectedEmoji}
+          />
+          <ChatDetailFooter
+            selectedUser={selectedUser}
+            showEmoji={showEmoji}
+            setShowEmoji={setShowEmoji}
+            selectedEmoji={selectedEmoji}
+          />
         </>
       ) : (
         <div className="flex justify-center items-center h-screen">

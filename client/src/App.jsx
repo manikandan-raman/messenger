@@ -6,6 +6,9 @@ import { useSocket } from "./contexts/SocketContext";
 import { useCurrentUser } from "./contexts/CurrentUserContext";
 import { Navigate, useParams } from "react-router-dom";
 import { useGetUserById } from "./hooks/useGetUserById";
+import cookie from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import { EmojiProvider } from "./contexts/EmojiContext";
 
 const App = () => {
   const { socket } = useSocket();
@@ -16,6 +19,11 @@ const App = () => {
 
   if (!currentUser?._id) {
     return <Navigate to="/login" />;
+  } else {
+    const { exp } = jwtDecode(cookie.get("token"));
+    if (Date.now() >= exp * 1000) {
+      return <Navigate to="/login" />;
+    }
   }
 
   useEffect(() => {
@@ -49,10 +57,12 @@ const App = () => {
   }, []);
 
   return (
-    <div className="h-screen w-screen bg-blue-500">
+    <div className="h-screen w-screen bg-primary">
       <div className="p-6 flex h-full z-10">
-        <ChatSideBar />
-        <ChatDetail />
+        <EmojiProvider>
+          <ChatSideBar />
+          <ChatDetail />
+        </EmojiProvider>
       </div>
     </div>
   );

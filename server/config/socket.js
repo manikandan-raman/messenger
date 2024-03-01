@@ -22,17 +22,12 @@ export function initializeSocket(server) {
     socket.on("new_message", (message) => {
       console.log({
         newmessage: message,
-        users: [
-          connectedUsers.get(message.receiver),
-          connectedUsers.get(message.sender),
-        ],
       });
-      socket
-        .to([
-          connectedUsers.get(message.receiver),
-          connectedUsers.get(message.sender),
-        ])
-        .emit("received_message", message);
+      if (connectedUsers.has(message.receiver)) {
+        socket
+          .to(connectedUsers.get(message.receiver))
+          .emit("received_message", message);
+      }
     });
 
     socket.on("user_disconnected", (user_id) => {

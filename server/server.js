@@ -7,6 +7,7 @@ import messageRouter from "./src/routes/message.route.js";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import { initializeSocket } from "./config/socket.js";
+import logger from "./config/logger.js";
 
 dotenv.config();
 connectDB();
@@ -20,6 +21,15 @@ initializeSocket(server);
 
 app.get("/", (req, res) => {
   res.json({ msg: "Hello World!" });
+});
+
+app.use((req, res, next) => {
+  logger.info({
+    method: req.method,
+    url: req.url,
+    statusCode: res.statusCode,
+  });
+  next();
 });
 
 app.use("/api/auth", authRouter);
