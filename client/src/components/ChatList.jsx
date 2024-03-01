@@ -16,7 +16,7 @@ const ChatList = () => {
   });
 
   return (
-    <div className="px-2 w-full">
+    <div className="w-full">
       {isLoading ? (
         "Loading..."
       ) : (

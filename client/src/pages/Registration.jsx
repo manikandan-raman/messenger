@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { httpCall } from "../utils/api-instance";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import LoginIllustrationSvg from "../../public/assets/login_illustration.svg";
 
 const Registration = () => {
   const navigate = useNavigate();
@@ -63,62 +64,86 @@ const Registration = () => {
   };
 
   return (
-    <div className="w-screen h-screen grid place-items-center bg-red-300 text-black">
-      <form autoComplete="off" onSubmit={handleSubmit(handleRegistration)}>
-        <h2 className="font-medium text-xl text-center mb-4">MyApp | Chat </h2>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          placeholder="Name"
-          {...register("name")}
-          className="block px-4 py-2 rounded-md mt-2"
-        />
-        {errors.name && (
-          <span className="text-red-500 text-left">{errors.name.message}</span>
-        )}
-        <input
-          type="text"
-          name="username"
-          id="username"
-          placeholder="Username"
-          {...register("username")}
-          className="block px-4 py-2 rounded-md mt-2"
-        />
-        {errors.username && (
-          <span className="text-red-500 mt-2">{errors.username.message}</span>
-        )}
-        <input
-          type="email"
-          name="email"
-          id="email"
-          placeholder="Email"
-          {...register("email")}
-          className="block px-4 py-2 rounded-md mt-2"
-        />
-        {errors.email && (
-          <span className="text-red-500 mt-2">{errors.email.message}</span>
-        )}
-        <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="Password"
-          {...register("password")}
-          className="block px-4 py-2 rounded-md mt-2"
-        />
-        {errors.password && (
-          <span className="text-red-500 my-2 text-wrap">
-            {errors.password.message}
-          </span>
-        )}
-        <button
-          className="bg-blue-600 mt-4 text-white px-4 py-2 rounded-md block mx-auto"
-          type="submit"
-        >
-          Register
-        </button>
-      </form>
+    <div className="w-screen h-screen grid place-items-center text-black">
+      <div className="w-1/2 flex justify-center h-1/2 shadow-lg shadow-slate-250">
+        <div className="basis-1/2 bg-primary rounded-l-md">
+          <form
+            autoComplete="off"
+            className="h-full flex flex-col justify-center items-center gap-2"
+            onSubmit={handleSubmit(handleRegistration)}
+          >
+            <h2 className="font-medium text-2xl text-center mb-2 text-white">
+              mChat
+            </h2>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Name"
+              {...register("name")}
+              className="block focus:outline-none px-4 py-2 rounded-md mt-2"
+            />
+            {errors.name && (
+              <span className="text-red-500 text-left">
+                {errors.name.message}
+              </span>
+            )}
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Username"
+              {...register("username")}
+              className="block focus:outline-none px-4 py-2 rounded-md mt-2"
+            />
+            {errors.username && (
+              <span className="text-red-500 mt-2">
+                {errors.username.message}
+              </span>
+            )}
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email"
+              {...register("email")}
+              className="block focus:outline-none px-4 py-2 rounded-md mt-2"
+            />
+            {errors.email && (
+              <span className="text-red-500 mt-2">{errors.email.message}</span>
+            )}
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              {...register("password")}
+              className="block focus:outline-none px-4 py-2 rounded-md mt-2"
+            />
+            {errors.password && (
+              <span className="text-red-500 my-2 text-wrap">
+                {errors.password.message}
+              </span>
+            )}
+            <button
+              className="text-primary mt-2 bg-white px-4 py-2 rounded-md block mx-auto"
+              type="submit"
+            >
+              Register
+            </button>
+            <h4 className="text-white">
+              Already have an account? <Link to="/login">Sign in</Link>
+            </h4>
+          </form>
+        </div>
+        <div className="basis-1/2 rounded-r-md">
+          <img
+            className="w-full h-full"
+            src={LoginIllustrationSvg}
+            alt="login illustration"
+          />
+        </div>
+      </div>
     </div>
   );
 };

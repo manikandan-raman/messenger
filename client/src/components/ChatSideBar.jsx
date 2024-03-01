@@ -23,7 +23,7 @@ const ChatSideBar = () => {
   };
   return (
     <>
-      <div className="basis-2/6 bg-gray-50 rounded-l-md border-r-2 border-gray-150">
+      <div className="basis-[30%] bg-gray-50 rounded-l-md border-r-2 border-gray-150">
         <div className="flex justify-between items-center p-4 h-16">
           <div className="flex items-center gap-2">
             <img
@@ -52,9 +52,14 @@ const ChatSideBar = () => {
                 onClick={() => setShowMenu(!showMenu)}
               />
               {showMenu && (
-                <div className="absolute z-20 bg-white py-2 px-8 right-4 text-center cursor-pointer rounded-md shadow-md">
-                  <p className="py-1">Settings</p>
-                  <p onClick={handleLogout} className="py-1">
+                <div className="absolute z-20 bg-white right-4 text-center cursor-pointer rounded-md shadow-md">
+                  <p className="hover:bg-secondary px-8 py-2 w-full">
+                    Settings
+                  </p>
+                  <p
+                    onClick={handleLogout}
+                    className="py-2 px-8 hover:bg-secondary"
+                  >
                     Logout
                   </p>
                 </div>

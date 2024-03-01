@@ -18,7 +18,7 @@ const ChatListItem = ({ user }) => {
 
   return (
     <div
-      className="rounded-sm cursor-pointer hover:bg-gray-200"
+      className="rounded-sm cursor-pointer px-2 hover:bg-gray-200"
       onClick={() => openChat(user)}
     >
       <div className="p-2 flex items-center gap-2">
@@ -27,13 +27,13 @@ const ChatListItem = ({ user }) => {
           src={AvatarSvg}
           alt="avatar"
         />
-        <div className="basis-[60%]">
+        <div className="basis-[65%]">
           <p>{user?.name}</p>
           <p className="line-clamp-1">
             {user?.last_message?.content || "Yet to message"}
           </p>
         </div>
-        <p className="text-sm basis-[25%] text-right">
+        <p className="text-sm basis-[20%] text-right">
           {user?.last_message?.time}
         </p>
       </div>

@@ -68,7 +68,7 @@ const ChatDetailFooter = ({
   };
   return (
     <div className="bg-gray-50 h-16 p-2 flex items-center gap-2">
-      <img className="size-8 basis-[5%]" src={PlusSvg} alt="plus" />
+      {/* <img className="size-8 basis-[5%]" src={PlusSvg} alt="plus" /> */}
       <img
         className="size-8 basis-[5%] cursor-pointer"
         src={SmilieSvg}
@@ -93,7 +93,7 @@ const ChatDetailFooter = ({
         />
       ) : (
         <img
-          className="size-10 basis-[5%] bg-teal-500 rounded-full py-1 cursor-pointer"
+          className="size-10 basis-[5%] bg-primary rounded-full p-1 cursor-pointer"
           src={SendSvg}
           alt="send"
           onClick={sendMessage}

@@ -9,6 +9,7 @@ import { httpCall } from "../utils/api-instance";
 import { useSocket } from "../contexts/SocketContext";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { useEmoji } from "../contexts/EmojiContext";
+import SelectConversationSvg from "../../public/assets/select-conversation.svg";
 
 const ChatDetail = () => {
   const { selectedUser } = useChat();
@@ -50,7 +51,7 @@ const ChatDetail = () => {
   }, [socket]);
 
   return (
-    <div className="basis-2/3 relative bg-secondary rounded-r-md">
+    <div className="basis-[70%] relative bg-secondary rounded-r-md">
       {selectedUser?._id ? (
         <>
           <ChatDetailHeader />
@@ -67,8 +68,13 @@ const ChatDetail = () => {
           />
         </>
       ) : (
-        <div className="flex justify-center items-center h-screen">
-          Select a conversation
+        <div className="flex flex-col justify-center items-center h-full">
+          <img
+            className="w-[40%]"
+            src={SelectConversationSvg}
+            alt="select-conversation"
+          />
+          <p>Select a conversation</p>
         </div>
       )}
     </div>
