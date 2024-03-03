@@ -8,16 +8,14 @@ export const useLastSeen = (lastSeen) => {
     minute: "2-digit",
   });
 
-  let date = last_seen.toLocaleDateString("zh-Hans-CN", {
+  let date = last_seen.toLocaleDateString("en-US", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
   });
-  date = convertDate(date);
-  return (
-    "last seen" +
-    (date = ["TODAY", "YESTERDAY"].includes(date)
-      ? date.toLowerCase() + " at"
-      : date)
-  );
+  date = convertDate(date, true);
+  date =
+    "last seen " +
+    (date = ["TODAY", "YESTERDAY"].includes(date) ? date.toLowerCase() : date);
+  return date + " at " + time;
 };

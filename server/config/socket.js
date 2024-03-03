@@ -14,7 +14,6 @@ export function initializeSocket(server) {
   });
 
   io.use((socket, next) => {
-    console.log("socket.handshake.auth", socket.handshake.auth);
     if (socket.handshake.auth.token) {
       next();
     } else {

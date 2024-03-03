@@ -5,6 +5,7 @@ import { httpCall } from "../utils/api-instance";
 import AvatarSvg from "../../public/assets/avatar.svg";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { useChat } from "../contexts/ChatContext";
+import cookie from "js-cookie";
 
 const AllUsersList = ({ setShowAllUsers, searchField }) => {
   const [usersList, setUserList] = useState([]);
@@ -73,7 +74,9 @@ const AllUsersList = ({ setShowAllUsers, searchField }) => {
                   </p>
                   <p className="line-clamp-1">User Status Will be Shown Here</p>
                 </div>
-                {!currentUser?.contacts?.includes(user._id) && (
+                {!JSON.parse(cookie.get("currentUserContacts"))?.includes(
+                  user._id
+                ) && (
                   <button
                     className="basis-[20%] bg-blue-500 rounded-md text-white p-1"
                     onClick={() => addContactToUser(user?._id)}

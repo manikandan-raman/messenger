@@ -4,28 +4,13 @@ import SearchSvg from "../../public/assets/search.svg";
 import MenuSvg from "../../public/assets/menu.svg";
 import ClearSvg from "../../public/assets/clear.svg";
 import { useChat } from "../contexts/ChatContext";
-import { convertDate } from "../utils/date-convert";
+import { useLastSeen } from "../hooks/useLastSeen";
 
 const ChatDetailHeader = ({ searchField, setSearchField }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const { selectedUser } = useChat();
-  const last_seen = new Date(selectedUser?.last_seen);
-  const time = last_seen.toLocaleTimeString("en-IN", {
-    hour12: true,
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  let date = last_seen.toLocaleDateString("zh-Hans-CN", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-  date = convertDate(date);
-  date = ["TODAY", "YESTERDAY"].includes(date)
-    ? date.toLowerCase() + " at"
-    : date;
+  const lastSeen = useLastSeen(selectedUser?.last_seen);
 
   return (
     <div className="bg-gray-50 h-16 p-2 border-b-2 border-gray-100 flex justify-between items-center gap-2">
@@ -37,7 +22,7 @@ const ChatDetailHeader = ({ searchField, setSearchField }) => {
         />
         <div>
           <p className="text-lg">{selectedUser?.name}</p>
-          <p className="line-clamp-1">last seen {date + " " + time}</p>
+          <p className="line-clamp-1">{lastSeen}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">

@@ -22,6 +22,10 @@ const Login = () => {
       setCurrentUser(response.data.user);
       cookie.set("token", response.data.token, { secure: true });
       cookie.set("currentUserId", response.data.user._id);
+      cookie.set(
+        "currentUserContacts",
+        JSON.stringify(response.data.user.contacts)
+      );
       setTimeout(() => {
         navigate("/chats");
       }, 450);
