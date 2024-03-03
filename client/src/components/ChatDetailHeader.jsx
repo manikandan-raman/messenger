@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import AvatarSvg from "../../public/assets/avatar.svg";
 import SearchSvg from "../../public/assets/search.svg";
 import MenuSvg from "../../public/assets/menu.svg";
+import ClearSvg from "../../public/assets/clear.svg";
 import { useChat } from "../contexts/ChatContext";
 import { convertDate } from "../utils/date-convert";
 
-const ChatDetailHeader = () => {
+const ChatDetailHeader = ({ searchField, setSearchField }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   const { selectedUser } = useChat();
   const last_seen = new Date(selectedUser?.last_seen);
   const time = last_seen.toLocaleTimeString("en-IN", {
@@ -39,7 +41,34 @@ const ChatDetailHeader = () => {
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <img className="size-8 cursor-pointer" src={SearchSvg} alt="search" />
+        {showSearch && (
+          <div className="relative">
+            <input
+              className="border border-stone-400 px-2 py-1 w-full rounded-md focus:outline-none"
+              type="text"
+              name="search_chat"
+              id="search_chat"
+              autoComplete="off"
+              placeholder="Search"
+              onChange={(e) => setSearchField(e.target.value)}
+              value={searchField}
+            />
+            {searchField && (
+              <img
+                className="w-4 absolute bottom-2 right-2 cursor-pointer"
+                src={ClearSvg}
+                alt="clear-icon"
+                onClick={() => setSearchField("")}
+              />
+            )}
+          </div>
+        )}
+        <img
+          className="size-8 cursor-pointer"
+          src={SearchSvg}
+          alt="search"
+          onClick={() => setShowSearch(!showSearch)}
+        />
         <div className="relative">
           <img
             className="size-6 cursor-pointer"

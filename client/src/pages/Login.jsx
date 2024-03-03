@@ -24,7 +24,7 @@ const Login = () => {
       cookie.set("currentUserId", response.data.user._id);
       setTimeout(() => {
         navigate("/chats");
-      }, 250);
+      }, 450);
     }
   };
   return (

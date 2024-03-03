@@ -13,6 +13,15 @@ export function initializeSocket(server) {
     },
   });
 
+  io.use((socket, next) => {
+    console.log("socket.handshake.auth", socket.handshake.auth);
+    if (socket.handshake.auth.token) {
+      next();
+    } else {
+      next(new Error("Invalid token"));
+    }
+  });
+
   io.on("connection", (socket) => {
     socket.on("user_connected", ({ user_id, socket_id }) => {
       connectedUsers.set(user_id, socket_id);

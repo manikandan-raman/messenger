@@ -3,7 +3,7 @@ import ChatDetailHeader from "./ChatDetailHeader";
 import ChatDetailFooter from "./ChatDetailFooter";
 import MessageList from "./MessageList";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { useChat } from "../contexts/ChatContext";
 import { httpCall } from "../utils/api-instance";
 import { useSocket } from "../contexts/SocketContext";
@@ -12,53 +12,83 @@ import { useEmoji } from "../contexts/EmojiContext";
 import SelectConversationSvg from "../../public/assets/select-conversation.svg";
 
 const ChatDetail = () => {
+  const [searchField, setSearchField] = useState("");
   const { selectedUser } = useChat();
-  const { socket } = useSocket();
-  const { currentUser } = useCurrentUser();
+  // const { socket } = useSocket();
+  // const { currentUser } = useCurrentUser();
   const { showEmoji, setShowEmoji, selectedEmoji, setSelectedEmoji } =
     useEmoji();
 
-  const { data: messagesList, refetch: refetchMessages } = useQuery({
-    queryKey: ["userMessages", { id: selectedUser?._id }],
-    queryFn: async () => {
-      return (
-        selectedUser?._id
-          ? await httpCall.get(
-              `message/${selectedUser?._id}/${currentUser?._id}?limit=15&offset=0`
-            )
-          : resolve([])
-      ).data;
-    },
-  });
+  // const { data: messagesList, refetch: refetchMessages } = useQuery({
+  //   queryKey: ["userMessages", { id: selectedUser?._id }],
+  //   queryFn: async () => {
+  //     return (
+  //       selectedUser?._id
+  //         ? await httpCall.get(
+  //             `message/${selectedUser?._id}/${currentUser?._id}?limit=15&offset=0`
+  //           )
+  //         : resolve([])
+  //     ).data;
+  //   },
+  // });
 
-  const updateMessageRead = useMutation({
-    mutationKey: ["updateMessageRead"],
-    mutationFn: async (read) => {
-      return await httpCall.patch("message", { read });
-    },
-    onSettled: async () => await refetchMessages(),
-  });
+  // const {
+  //   data: { pages: messagesList } = {},
+  //   isFetching,
+  //   fetchNextPage,
+  //   hasNextPage,
+  // } = useInfiniteQuery({
+  //   queryKey: ["userMessages", { id: selectedUser?._id }],
+  //   queryFn: async ({ pageParam }) => {
+  //     return (
+  //       selectedUser?._id
+  //         ? await httpCall.get(
+  //             `message/${selectedUser?._id}/${currentUser?._id}?limit=1&offset=${pageParam}`
+  //           )
+  //         : resolve([])
+  //     ).data;
+  //   },
+  //   initialPageParam: 0,
+  //   getNextPageParam: (lastPage, pages, lastPageParam) => {
+  //     return lastPage?.nextId;
+  //   },
+  // });
 
-  useEffect(() => {
-    socket.on("received_message", (message) => {
-      (async function () {
-        // if (socket.connected) {
-        //   updateMessageRead.mutate({ read: true });
-        // }
-        await refetchMessages();
-      })();
-    });
-  }, [socket]);
+  // const updateMessageRead = useMutation({
+  //   mutationKey: ["updateMessageRead"],
+  //   mutationFn: async (read) => {
+  //     return await httpCall.patch("message", { read });
+  //   },
+  //   onSettled: async () => await refetchMessages(),
+  // });
+
+  // useEffect(() => {
+  //   socket.on("received_message", (message) => {
+  //     (async function () {
+  //       // if (socket.connected) {
+  //       //   updateMessageRead.mutate({ read: true });
+  //       // }
+  //       await refetchMessages();
+  //     })();
+  //   });
+  // }, [socket]);
 
   return (
     <div className="basis-[70%] relative bg-secondary rounded-r-md">
       {selectedUser?._id ? (
         <>
-          <ChatDetailHeader />
+          <ChatDetailHeader
+            searchField={searchField}
+            setSearchField={setSearchField}
+          />
           <MessageList
-            messagesList={messagesList?.data}
+            // messagesList={messagesList}
+            searchField={searchField}
             showEmoji={showEmoji}
             setSelectedEmoji={setSelectedEmoji}
+            // isFetching={isFetching}
+            // fetchNextPage={fetchNextPage}
+            // hasNextPage={hasNextPage}
           />
           <ChatDetailFooter
             selectedUser={selectedUser}

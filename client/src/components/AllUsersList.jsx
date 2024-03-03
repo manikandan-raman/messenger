@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { httpCall } from "../utils/api-instance";
 import AvatarSvg from "../../public/assets/avatar.svg";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { useChat } from "../contexts/ChatContext";
 
-const AllUsersList = ({ setShowAllUsers }) => {
+const AllUsersList = ({ setShowAllUsers, searchField }) => {
+  const [usersList, setUserList] = useState([]);
+  const [orgUsersList, setOrgUserList] = useState([]);
   const navigate = useNavigate();
   const { setSelectedUser } = useChat();
   const { currentUser } = useCurrentUser();
@@ -16,6 +18,23 @@ const AllUsersList = ({ setShowAllUsers }) => {
       return (await httpCall.get(`user`)).data;
     },
   });
+
+  useEffect(() => {
+    setOrgUserList(data?.users);
+    setUserList(data?.users);
+  }, [data]);
+
+  useEffect(() => {
+    if (searchField) {
+      setUserList(
+        usersList.filter((user) =>
+          user.name.toLowerCase().includes(searchField.toLowerCase())
+        )
+      );
+    } else if (usersList.length !== orgUsersList.length) {
+      setUserList(orgUsersList);
+    }
+  }, [searchField]);
 
   const addContactToUser = async (contact_id) => {
     const response = await httpCall.patch(
@@ -36,7 +55,7 @@ const AllUsersList = ({ setShowAllUsers }) => {
         "Loading..."
       ) : (
         <div>
-          {data?.users.map((user) => (
+          {usersList?.map((user) => (
             <div
               key={user?._id}
               className="rounded-sm cursor-pointer hover:bg-gray-200"

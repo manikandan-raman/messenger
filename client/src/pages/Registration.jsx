@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoginIllustrationSvg from "../../public/assets/login_illustration.svg";
+import { useDebounce } from "use-debounce";
 
 const Registration = () => {
   const navigate = useNavigate();
@@ -34,24 +35,23 @@ const Registration = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const username = watch("username");
+  const [usernameval] = useDebounce(username, 1000);
 
   useEffect(() => {
-    setTimeout(() => {
-      (async function () {
-        if (username && username.length > 3) {
-          const response = await httpCall.get(
-            `user/is-available?username=${username}`
-          );
-          if (response?.isAvailable) {
-            setError("username", {
-              type: "manual",
-              message: "username is already taken",
-            });
-          }
+    (async function () {
+      if (usernameval) {
+        const response = await httpCall.get(
+          `user/is-available?username=${usernameval}`
+        );
+        if (response?.isAvailable) {
+          setError("username", {
+            type: "manual",
+            message: "username is already taken",
+          });
         }
-      })();
-    }, 1000);
-  }, [username]);
+      }
+    })();
+  }, [usernameval]);
 
   const handleRegistration = async (data) => {
     const response = await httpCall.post("auth/signup", {

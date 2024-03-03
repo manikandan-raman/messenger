@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import { io } from "socket.io-client";
+import cookie from "js-cookie";
 
 export const SocketContext = createContext({});
 
@@ -8,6 +9,7 @@ export const SocketProvider = ({ children }) => {
     io("ws://localhost:5000", {
       autoConnect: false,
       reconnection: false,
+      auth: { token: cookie.get("token") },
     })
   );
   const value = useMemo(() => ({ socket }), [socket]);

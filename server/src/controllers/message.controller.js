@@ -17,14 +17,22 @@ export const getAllMessagesByUser = async (req, res) => {
     const sender = new Types.ObjectId(req.params.sender_id);
     const limit = req.query.limit ?? 8;
     const skip = req.query.offset ?? 0;
+    const search = req.query.search ?? "";
     const messages = await Message.aggregate([
       {
         $match: {
-          $or: [
+          $and: [
             {
-              $and: [{ sender }, { receiver }],
+              $or: [
+                {
+                  $and: [{ sender }, { receiver }],
+                },
+                { $and: [{ sender: receiver }, { receiver: sender }] },
+              ],
             },
-            { $and: [{ sender: receiver }, { receiver: sender }] },
+            {
+              content: { $regex: search, $options: "i" },
+            },
           ],
         },
       },
@@ -51,15 +59,6 @@ export const getAllMessagesByUser = async (req, res) => {
         $unwind: "$receiver",
       },
       {
-        $sort: { date: -1 },
-      },
-      {
-        $skip: parseInt(skip),
-      },
-      {
-        $limit: parseInt(limit),
-      },
-      {
         $group: {
           _id: "$date",
           messages: {
@@ -73,6 +72,7 @@ export const getAllMessagesByUser = async (req, res) => {
                 _id: "$receiver._id",
                 name: "$receiver.name",
               },
+              is_read: "$is_read",
               content: "$content",
               time: "$time",
             },
@@ -87,6 +87,12 @@ export const getAllMessagesByUser = async (req, res) => {
         },
       },
       {
+        $skip: parseInt(skip),
+      },
+      {
+        $limit: parseInt(limit),
+      },
+      {
         $sort: { date: 1 },
       },
     ]).exec();
@@ -96,11 +102,14 @@ export const getAllMessagesByUser = async (req, res) => {
   }
 };
 
-export const updateMessage = async (req, res) => {
+export const updateMessageToRead = async (req, res) => {
   try {
-    let message = Message.findOne(req.params.message_id);
-    message.read = true;
-    message = await message.save();
+    console.log({ m: req.params.message_id });
+    const message = await Message.findOneAndUpdate(
+      { _id: new Types.ObjectId(req.params.message_id) },
+      { $set: { is_read: true } },
+      { new: true }
+    );
     return res.json({ message });
   } catch (error) {
     console.error(error);

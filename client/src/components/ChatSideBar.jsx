@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChatList from "./ChatList";
 import MenuSvg from "../../public/assets/menu.svg";
 import NewContactSvg from "../../public/assets/new-contact.svg";
@@ -11,6 +11,7 @@ import AllUsersList from "./AllUsersList";
 const ChatSideBar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showAllUsers, setShowAllUsers] = useState(false);
+  const [searchField, setSearchField] = useState("");
   const { socket } = useSocket();
   const { currentUser } = useCurrentUser();
   const navigate = useNavigate();
@@ -20,6 +21,12 @@ const ChatSideBar = () => {
     cookie.remove("token");
     cookie.remove("currentUserId");
     navigate("/login");
+  };
+
+  const handleNewContact = () => {
+    setShowMenu(false);
+    setSearchField("");
+    setShowAllUsers(!showAllUsers);
   };
   return (
     <>
@@ -38,10 +45,7 @@ const ChatSideBar = () => {
               className="size-7 cursor-pointer"
               src={NewContactSvg}
               alt="new_contact"
-              onClick={() => {
-                setShowAllUsers(!showAllUsers);
-                setShowMenu(false);
-              }}
+              onClick={handleNewContact}
               title="All users"
             />
             <div className="relative">
@@ -69,11 +73,14 @@ const ChatSideBar = () => {
         </div>
         <div className="search-chat flex justify-between items-center gap-2 p-4 h-16">
           <input
-            className="border border-stone-400 px-4 py-2 w-full rounded-md"
+            className="border border-stone-400 px-4 py-2 w-full rounded-md focus:outline-none"
             type="text"
             name="search_chat"
             id="search_chat"
+            autoComplete="off"
             placeholder="Search or start new chat"
+            onChange={(e) => setSearchField(e.target.value)}
+            value={searchField}
           />
           <img
             className="size-8"
@@ -83,9 +90,12 @@ const ChatSideBar = () => {
         </div>
         <div className="overflow-y-scroll h-[calc(100%-8rem)]">
           {showAllUsers ? (
-            <AllUsersList setShowAllUsers={setShowAllUsers} />
+            <AllUsersList
+              setShowAllUsers={setShowAllUsers}
+              searchField={searchField}
+            />
           ) : (
-            <ChatList />
+            <ChatList searchField={searchField} />
           )}
         </div>
       </div>

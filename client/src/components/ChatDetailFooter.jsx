@@ -39,18 +39,19 @@ const ChatDetailFooter = ({
     mutationFn: async (newMessage) => {
       return await httpCall.post("message", { data: newMessage });
     },
-    onSettled: async () =>
-      Promise.all([
-        await queryClient.refetchQueries({ queryKey: ["usersList"] }),
-        await queryClient.refetchQueries({
+    onSettled: async (data) => {
+      return await Promise.all([
+        socket.emit("new_message", data.data.message),
+        queryClient.refetchQueries({ queryKey: ["usersList"] }),
+        queryClient.refetchQueries({
           queryKey: ["userMessages", { id: selectedUser?._id }],
         }),
-      ]),
+      ]);
+    },
   });
 
   const sendMessage = async (event = undefined) => {
-    console.log({ event });
-    if (event && event.type === "onKeyDown" && event.key !== "Enter") {
+    if (event && event.type === "keydown" && event.key !== "Enter") {
       return;
     }
     const newMessage = {
@@ -63,7 +64,6 @@ const ChatDetailFooter = ({
     setShowEmoji(false);
     sendMessageMutation.mutate(newMessage);
     // await httpCall.post("message", { data: newMessage });
-    socket.emit("new_message", newMessage);
     setMessage("");
   };
   return (

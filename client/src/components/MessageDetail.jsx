@@ -7,8 +7,9 @@ import DoubleTickSvg from "../../public/assets/double-tick.svg";
 const MessageDetail = ({ date, messages }) => {
   const { currentUser } = useCurrentUser();
   date = convertDate(date);
+
   return (
-    <div className="pt-24">
+    <div className="pt-4">
       <div className="flex justify-center mb-2">
         <div className="rounded py-2 px-4 bg-[#DDECF2]">
           <p className="text-sm uppercase">{date}</p>
@@ -27,7 +28,7 @@ const MessageDetail = ({ date, messages }) => {
                     </p>
                     <img
                       className="w-4"
-                      src={message.read ? DoubleTickSvg : TickSvg}
+                      src={message.is_read ? DoubleTickSvg : TickSvg}
                       alt="tick"
                     />
                   </div>
