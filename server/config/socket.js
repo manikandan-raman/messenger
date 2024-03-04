@@ -52,11 +52,13 @@ export function initializeSocket(server) {
     });
 
     socket.on("disconnect", () => {
-      socket.broadcast.emit(
-        "online",
-        JSON.stringify(Array.from(connectedUsers))
-      );
+      socket.emit("online", JSON.stringify(Array.from(connectedUsers)));
       console.log("A user disconnected");
+    });
+
+    socket.on("error", (error) => {
+      console.error("socket error:", error);
+      throw new Error(error);
     });
   });
 

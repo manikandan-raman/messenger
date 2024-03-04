@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import { initializeSocket } from "./config/socket.js";
 import logger from "./config/logger.js";
+import errorHandler from "./utils/errorHandler.js";
 
 dotenv.config();
 connectDB();
@@ -20,7 +21,7 @@ const server = createServer(app);
 initializeSocket(server);
 
 app.get("/", (req, res) => {
-  res.json({ msg: "Hello World!" });
+  res.json({ msg: "Hello World!!!!!" });
 });
 
 app.use((req, res, next) => {
@@ -35,5 +36,6 @@ app.use((req, res, next) => {
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/message", messageRouter);
+app.use(errorHandler);
 
 server.listen(5000, () => console.log("Server up and running on 5000"));

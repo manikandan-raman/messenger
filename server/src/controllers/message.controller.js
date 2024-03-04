@@ -7,7 +7,7 @@ export const addMessage = async (req, res) => {
     message = await message.save();
     return res.json({ message });
   } catch (error) {
-    console.error(error);
+    return next(error);
   }
 };
 
@@ -98,7 +98,7 @@ export const getAllMessagesByUser = async (req, res) => {
     ]).exec();
     return res.json({ data: messages });
   } catch (error) {
-    console.error(error);
+    return next(error);
   }
 };
 
@@ -112,6 +112,6 @@ export const updateMessageToRead = async (req, res) => {
     );
     return res.json({ message });
   } catch (error) {
-    console.error(error);
+    return next(error);
   }
 };

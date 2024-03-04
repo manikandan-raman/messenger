@@ -19,7 +19,8 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-userSchema.methods.updateLastSeen = async function () {
+userSchema.methods.updateLastSeen = async function (next) {
+  if (!this.last_seen) return next();
   this.last_seen = new Date();
   return await this.save();
 };
