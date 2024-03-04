@@ -24,6 +24,10 @@ export function initializeSocket(server) {
   io.on("connection", (socket) => {
     socket.on("user_connected", ({ user_id, socket_id }) => {
       connectedUsers.set(user_id, socket_id);
+      socket.broadcast.emit(
+        "online",
+        JSON.stringify(Array.from(connectedUsers))
+      );
       console.log(connectedUsers);
     });
 
@@ -38,12 +42,17 @@ export function initializeSocket(server) {
       }
     });
 
+    socket.on("is_typing", (is_typing) => {
+      socket.broadcast.emit("is_typing", is_typing);
+    });
+
     socket.on("user_disconnected", (user_id) => {
       connectedUsers.delete(user_id);
       User.findById(user_id).then((user) => user.updateLastSeen());
     });
 
     socket.on("disconnect", () => {
+      socket.emit("online", JSON.stringify(Array.from(connectedUsers)));
       console.log("A user disconnected");
     });
   });

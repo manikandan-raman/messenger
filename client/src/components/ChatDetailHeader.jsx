@@ -1,16 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AvatarSvg from "../../public/assets/avatar.svg";
 import SearchSvg from "../../public/assets/search.svg";
 import MenuSvg from "../../public/assets/menu.svg";
 import ClearSvg from "../../public/assets/clear.svg";
 import { useChat } from "../contexts/ChatContext";
 import { useLastSeen } from "../hooks/useLastSeen";
+import { useSocket } from "../contexts/SocketContext";
 
 const ChatDetailHeader = ({ searchField, setSearchField }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [isOnline, setIsOnline] = useState(false);
   const { selectedUser } = useChat();
+  const { socket } = useSocket();
   const lastSeen = useLastSeen(selectedUser?.last_seen);
+
+  useEffect(() => {
+    socket.on("is_typing", (is_typing) => {
+      setIsTyping(is_typing);
+    });
+
+    socket.on("online", (onlineUsers) => {
+      const d = new Map(JSON.parse(onlineUsers));
+      setIsOnline(d.has(selectedUser._id));
+    });
+  }, [socket]);
 
   return (
     <div className="bg-gray-50 h-16 p-2 border-b-2 border-gray-100 flex justify-between items-center gap-2">
@@ -22,7 +37,9 @@ const ChatDetailHeader = ({ searchField, setSearchField }) => {
         />
         <div>
           <p className="text-lg">{selectedUser?.name}</p>
-          <p className="line-clamp-1">{lastSeen}</p>
+          <p className="line-clamp-1">
+            {isOnline ? "Online" : isTyping ? "typing..." : lastSeen}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-2">

@@ -52,6 +52,7 @@ const ChatDetailFooter = ({
 
   const sendMessage = async (event = undefined) => {
     if (event && event.type === "keydown" && event.key !== "Enter") {
+      socket.emit("is_typing", true);
       return;
     }
     const newMessage = {
@@ -84,6 +85,7 @@ const ChatDetailFooter = ({
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => sendMessage(e)}
+        onBlur={() => socket.emit("is_typing", false)}
       />
       {false ? (
         <img
