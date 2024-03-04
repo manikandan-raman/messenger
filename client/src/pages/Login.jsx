@@ -32,16 +32,16 @@ const Login = () => {
     }
   };
   return (
-    <div className="w-screen h-screen grid place-items-center text-black">
-      <div className="w-1/2 flex justify-center h-1/2 shadow-lg shadow-slate-250">
-        <div className="basis-1/2 bg-primary rounded-l-md">
+    <div className="w-screen h-screen grid place-items-center text-black bg-gray-200 object-center">
+      <div className="w-3/4 flex justify-center h-3/4 shadow-lg shadow-slate-250">
+        <div className="basis-full md:basis-1/2 bg-primary rounded-l-md">
           <form
             autoComplete="off"
             method="post"
             onSubmit={(e) => handleLogin(e)}
             className="h-full flex flex-col justify-center items-center gap-4"
           >
-            <h2 className="font-medium text-2xl text-white">mChat</h2>
+            <h2 className="font-medium text-4xl text-white mb-2">mChat</h2>
             <input
               type="email"
               name="email"
@@ -61,7 +61,7 @@ const Login = () => {
               className="block px-4 py-2 rounded-md focus:outline-none"
             />
             <button
-              className="text-blue-600 bg-white px-4 py-2 rounded-md"
+              className="text-primary bg-white px-4 py-2 rounded-md"
               type="submit"
             >
               Login
@@ -71,7 +71,7 @@ const Login = () => {
             </h4>
           </form>
         </div>
-        <div className="basis-1/2 rounded-r-md">
+        <div className="hidden md:block md:basis-1/2 bg-white rounded-r-md">
           <img
             className="w-full h-full"
             src={LoginIllustrationSvg}

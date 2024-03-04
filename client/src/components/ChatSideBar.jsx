@@ -7,12 +7,14 @@ import cookie from "js-cookie";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { useNavigate } from "react-router-dom";
 import AllUsersList from "./AllUsersList";
+import { useChat } from "../contexts/ChatContext";
 
 const ChatSideBar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showAllUsers, setShowAllUsers] = useState(false);
   const [searchField, setSearchField] = useState("");
   const { socket } = useSocket();
+  const { selectedUser } = useChat();
   const { currentUser } = useCurrentUser();
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -30,7 +32,11 @@ const ChatSideBar = () => {
   };
   return (
     <>
-      <div className="basis-[30%] bg-gray-50 rounded-l-md border-r-2 border-gray-150">
+      <div
+        className={`${selectedUser?._id ? "hidden md:block" : ""}
+          md:basis-[30%]  basis-full
+         bg-gray-50 rounded-l-md border-r-2 border-gray-150`}
+      >
         <div className="flex justify-between items-center p-4 h-16">
           <div className="flex items-center gap-2">
             <img

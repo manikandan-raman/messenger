@@ -1,12 +1,13 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import cookie from "js-cookie";
+import { API_BASE_URL as SOCKET_BASE_URL } from "../utils/constant";
 
 export const SocketContext = createContext({});
 
 export const SocketProvider = ({ children }) => {
   const [socket] = useState(
-    io("ws://localhost:5000", {
+    io(SOCKET_BASE_URL, {
       autoConnect: false,
       reconnection: false,
       auth: { token: cookie.get("token") },

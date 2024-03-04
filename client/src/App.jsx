@@ -58,7 +58,7 @@ const App = () => {
 
   return (
     <div className="h-screen w-screen bg-primary">
-      <div className="p-10 flex h-full z-10">
+      <div className="md:p-10 flex h-full z-10">
         <EmojiProvider>
           <ChatSideBar />
           <ChatDetail />

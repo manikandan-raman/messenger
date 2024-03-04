@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import AvatarSvg from "../../public/assets/avatar.svg";
+import BackArrowSvg from "../../public/assets/back-arrow.svg";
 import SearchSvg from "../../public/assets/search.svg";
 import MenuSvg from "../../public/assets/menu.svg";
 import ClearSvg from "../../public/assets/clear.svg";
 import { useChat } from "../contexts/ChatContext";
 import { useLastSeen } from "../hooks/useLastSeen";
 import { useSocket } from "../contexts/SocketContext";
+import { useNavigate } from "react-router-dom";
 
 const ChatDetailHeader = ({ searchField, setSearchField }) => {
   const [showMenu, setShowMenu] = useState(false);
@@ -14,6 +16,7 @@ const ChatDetailHeader = ({ searchField, setSearchField }) => {
   const [isOnline, setIsOnline] = useState(false);
   const { selectedUser } = useChat();
   const { socket } = useSocket();
+  const navigate = useNavigate();
   const lastSeen = useLastSeen(selectedUser?.last_seen);
 
   useEffect(() => {
@@ -30,6 +33,12 @@ const ChatDetailHeader = ({ searchField, setSearchField }) => {
   return (
     <div className="bg-gray-50 h-16 p-2 border-b-2 border-gray-100 flex justify-between items-center gap-2">
       <div className="flex gap-2 items-center">
+        <img
+          className="md:hidden size-4 rounded-fullmy-2 cursor-pointer"
+          src={BackArrowSvg}
+          alt="avatar"
+          onClick={() => navigate("/chats")}
+        />
         <img
           className="size-12 rounded-fullmy-2"
           src={AvatarSvg}

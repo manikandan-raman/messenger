@@ -74,7 +74,11 @@ const ChatDetail = () => {
   // }, [socket]);
 
   return (
-    <div className="basis-[70%] relative bg-secondary rounded-r-md">
+    <div
+      className={`${
+        selectedUser?._id ? "block" : "hidden"
+      } md:block md:basis-[70%] basis-full relative bg-secondary rounded-r-md`}
+    >
       {selectedUser?._id ? (
         <>
           <ChatDetailHeader
