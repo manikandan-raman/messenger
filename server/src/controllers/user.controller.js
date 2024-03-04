@@ -1,7 +1,7 @@
 import { Message } from "../models/message.model.js";
 import { User } from "../models/user.model.js";
 
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find();
     return res.json({ users });
@@ -10,7 +10,7 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-export const getUserById = async (req, res) => {
+export const getUserById = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.params.id });
     return res.json({ user });
@@ -19,7 +19,7 @@ export const getUserById = async (req, res) => {
   }
 };
 
-export const getContactsById = async (req, res) => {
+export const getContactsById = async (req, res, next) => {
   try {
     const id = req.params.id;
     const user = await User.findById(id)
@@ -49,17 +49,23 @@ export const getContactsById = async (req, res) => {
               content: message.content,
               sender: message.sender,
               time: message.time,
+              createdAt: message.createdAt,
             }
           : {},
       });
     }
+    response.sort(
+      (a, b) =>
+        new Date(a.last_message?.createdAt).getTime() -
+        new Date(b.last_message?.createdAt).getTime()
+    );
     return res.json({ user: response });
   } catch (error) {
     return next(error);
   }
 };
 
-export const checkUserNameExists = async (req, res) => {
+export const checkUserNameExists = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.query.username });
     return res.json({ isAvailable: !!user?.username });
@@ -68,7 +74,7 @@ export const checkUserNameExists = async (req, res) => {
   }
 };
 
-export const addContactToUser = async (req, res) => {
+export const addContactToUser = async (req, res, next) => {
   try {
     const { user_id, contact_id } = req.params;
     const user = await User.findById(user_id);

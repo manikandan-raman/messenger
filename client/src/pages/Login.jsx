@@ -1,23 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import { httpCall } from "../utils/api-instance";
 import { Link, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import cookie from "js-cookie";
 import LoginIllustrationSvg from "../../public/assets/login_illustration.svg";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
   const { setCurrentUser } = useCurrentUser();
   const navigate = useNavigate();
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    const response = await httpCall.post("auth/signin", {
-      data: {
-        email,
-        password,
-      },
-    });
+
+  const schema = yup.object().shape({
+    email: yup.string().email("enter valid email").required("enter email"),
+    password: yup.string().required("enter password"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const handleLogin = async (data) => {
+    const response = await httpCall.post("auth/signin", { data });
     if (response.data.token) {
       setCurrentUser(response.data.user);
       cookie.set("token", response.data.token, { secure: true });
@@ -26,19 +33,17 @@ const Login = () => {
         "currentUserContacts",
         JSON.stringify(response.data.user.contacts)
       );
-      setTimeout(() => {
-        navigate("/chats");
-      }, 450);
+      navigate("/chats");
     }
   };
   return (
     <div className="w-screen h-screen grid place-items-center text-black bg-gray-200 object-center">
-      <div className="w-3/4 flex justify-center h-3/4 shadow-lg shadow-slate-250">
+      <div className="w-full md:w-3/4 flex justify-center h-full md:h-3/4 shadow-lg shadow-slate-250">
         <div className="basis-full md:basis-1/2 bg-primary rounded-l-md">
           <form
             autoComplete="off"
             method="post"
-            onSubmit={(e) => handleLogin(e)}
+            onSubmit={handleSubmit(handleLogin)}
             className="h-full flex flex-col justify-center items-center gap-4"
           >
             <h2 className="font-medium text-4xl text-white mb-2">mChat</h2>
@@ -47,19 +52,25 @@ const Login = () => {
               name="email"
               id="email"
               placeholder="Enter email"
-              defaultValue={email}
-              onChange={(e) => setEmail(e.target.value)}
               className="block px-4 py-2 rounded-md focus:outline-none"
+              {...register("email")}
             />
+            {errors.email && (
+              <span className="text-left text-red-500">
+                {errors.email.message}
+              </span>
+            )}
             <input
               type="password"
               name="password"
               id="password"
               placeholder="Enter password"
-              defaultValue={password}
-              onChange={(e) => setPassword(e.target.value)}
               className="block px-4 py-2 rounded-md focus:outline-none"
+              {...register("password")}
             />
+            {errors.password && (
+              <span className="text-red-500">{errors.password.message}</span>
+            )}
             <button
               className="text-primary bg-white px-4 py-2 rounded-md"
               type="submit"

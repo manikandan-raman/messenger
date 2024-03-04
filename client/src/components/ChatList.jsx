@@ -23,28 +23,29 @@ const ChatList = ({ searchField }) => {
   }, [data]);
 
   useEffect(() => {
-    if (searchField !== "") {
-      setUserList(
-        usersList.filter((user) =>
-          user.name.toLowerCase().includes(searchField.toLowerCase())
-        )
-      );
-    } else if (usersList.length !== orgUsersList.length) {
-      setUserList(orgUsersList);
+    if (usersList) {
+      if (searchField !== "") {
+        setUserList(
+          usersList.filter((user) =>
+            user.name.toLowerCase().includes(searchField.toLowerCase())
+          )
+        );
+      } else if (usersList.length !== orgUsersList.length) {
+        setUserList(orgUsersList);
+      }
     }
   }, [searchField]);
 
   return (
     <div className="w-full">
-      {isFetching ? (
-        "Loading..."
-      ) : (
-        <div>
-          {usersList?.map((user) => (
-            <ChatListItem key={user._id} user={user} />
-          ))}
-        </div>
-      )}
+      <div>
+        {isFetching
+          ? [1, 2, 3, 4, 5, 6, 7, 8].map((user) => <ChatListItem key={user} />)
+          : usersList &&
+            usersList.map((user) => (
+              <ChatListItem key={user._id} user={user} />
+            ))}
+      </div>
     </div>
   );
 };

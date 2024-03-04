@@ -65,7 +65,7 @@ const Registration = () => {
 
   return (
     <div className="w-screen h-screen grid place-items-center text-black">
-      <div className="w-3/4 flex justify-center h-3/4 shadow-lg shadow-slate-250">
+      <div className="w-full md:w-3/4 flex justify-center h-full md:h-3/4 shadow-lg shadow-slate-250">
         <div className="basis-full md:basis-1/2 bg-primary rounded-l-md">
           <form
             autoComplete="off"

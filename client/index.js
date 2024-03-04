@@ -8,6 +8,8 @@ import { CurrentUserProvider } from "./src/contexts/CurrentUserContext";
 import { SocketProvider } from "./src/contexts/SocketContext";
 import Registration from "./src/pages/Registration";
 import { ChatProvider } from "./src/contexts/ChatContext";
+import NotFound from "./src/components/NotFound";
+import Warning from "./src/components/Warning";
 
 const element = document.getElementById("chat");
 
@@ -17,24 +19,27 @@ const routerProvider = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+    errorElement: <NotFound />,
   },
   {
     path: "/login",
     element: <Login />,
+    errorElement: <Warning />,
   },
   {
     path: "/registration",
     element: <Registration />,
+    errorElement: <Warning />,
   },
   {
     path: "/chats",
     element: <App />,
-    errorElement: <div>Something went wrong</div>,
+    errorElement: <Warning />,
   },
   {
     path: "/chats/:receiver_id",
     element: <App />,
-    errorElement: <div>Something went wrong</div>,
+    errorElement: <Warning />,
   },
 ]);
 

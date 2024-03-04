@@ -1,9 +1,12 @@
 import { Types } from "mongoose";
 import { Message } from "../models/message.model.js";
 
-export const addMessage = async (req, res) => {
+export const addMessage = async (req, res, next) => {
   try {
     let message = new Message(req.body);
+    if (req.body.sender === req.body.receiver) {
+      message.is_read = true;
+    }
     message = await message.save();
     return res.json({ message });
   } catch (error) {
@@ -11,7 +14,7 @@ export const addMessage = async (req, res) => {
   }
 };
 
-export const getAllMessagesByUser = async (req, res) => {
+export const getAllMessagesByUser = async (req, res, next) => {
   try {
     const receiver = new Types.ObjectId(req.params.receiver_id);
     const sender = new Types.ObjectId(req.params.sender_id);
@@ -102,7 +105,7 @@ export const getAllMessagesByUser = async (req, res) => {
   }
 };
 
-export const updateMessageToRead = async (req, res) => {
+export const updateMessageToRead = async (req, res, next) => {
   try {
     console.log({ m: req.params.message_id });
     const message = await Message.findOneAndUpdate(
