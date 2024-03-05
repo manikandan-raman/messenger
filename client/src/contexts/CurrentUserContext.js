@@ -1,12 +1,17 @@
 import { createContext, useContext, useMemo, useState } from "react";
-import cookie from "js-cookie";
+import { useCookie } from "../hooks/useCookie";
 
 export const CurrentUserContext = createContext({});
 
 export const CurrentUserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(
-    { _id: cookie.get("currentUserId") } || null
-  );
+  const { getValueFromCookie } = useCookie();
+  const [currentUser, setCurrentUser] = useState(() => {
+    const userDetails = getValueFromCookie("currentUser", true);
+    if (userDetails) {
+      return userDetails;
+    }
+    return null;
+  });
   const value = useMemo(() => ({ currentUser, setCurrentUser }), [currentUser]);
 
   return (

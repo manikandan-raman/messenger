@@ -8,6 +8,8 @@ const userSchema = new Schema(
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     last_seen: { type: Date, required: true, default: new Date() },
+    status: { type: String, enum: ["active", "inactive"], default: "active" },
+    statusText: { type: String, required: true, default: "Hey there!!!" },
     contacts: [{ type: Types.ObjectId, ref: "User" }],
   },
   {

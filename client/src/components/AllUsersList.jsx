@@ -5,12 +5,13 @@ import { httpCall } from "../utils/api-instance";
 import AvatarSvg from "../../public/assets/avatar.svg";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { useChat } from "../contexts/ChatContext";
-import cookie from "js-cookie";
+import { useCookie } from "../hooks/useCookie";
 
 const AllUsersList = ({ setShowAllUsers, searchField }) => {
   const [usersList, setUserList] = useState([]);
   const [orgUsersList, setOrgUserList] = useState([]);
   const navigate = useNavigate();
+  const { setCookieValue } = useCookie();
   const { setSelectedUser } = useChat();
   const { currentUser } = useCurrentUser();
   const { isLoading, data } = useQuery({
@@ -46,6 +47,7 @@ const AllUsersList = ({ setShowAllUsers, searchField }) => {
     if (response.data.user._id) {
       setShowAllUsers(false);
       setSelectedUser(response.data.user);
+      setCookieValue("currentUser", response.data.user, true);
       navigate(`/chats/${response.data.user._id}`);
     }
   };
@@ -72,11 +74,9 @@ const AllUsersList = ({ setShowAllUsers, searchField }) => {
                     {user?.name +
                       (user._id === currentUser?._id ? " (You)" : "")}
                   </p>
-                  <p className="line-clamp-1">User Status Will be Shown Here</p>
+                  <p className="line-clamp-1">{user.statusText}</p>
                 </div>
-                {!JSON.parse(cookie.get("currentUserContacts"))?.includes(
-                  user._id
-                ) && (
+                {!currentUser?.contacts?.includes(user._id) && (
                   <button
                     className="basis-[20%] bg-blue-500 rounded-md text-white p-1"
                     onClick={() => addContactToUser(user?._id)}

@@ -1,8 +1,9 @@
 import { API_BASE_URL, PUBLIC_API_ENDPOINTS } from "./constant";
 import axios from "axios";
-import cookie from "js-cookie";
+import { useCookie } from "../hooks/useCookie";
 
-const token = cookie.get("token");
+const { getValueFromCookie } = useCookie();
+const token = getValueFromCookie("token");
 
 export const httpCall = {
   post: async (endpoint, { data }) => {

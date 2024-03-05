@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ChatList from "./ChatList";
 import MenuSvg from "../../public/assets/menu.svg";
 import NewContactSvg from "../../public/assets/new-contact.svg";
 import { useSocket } from "../contexts/SocketContext";
-import cookie from "js-cookie";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { useNavigate } from "react-router-dom";
 import AllUsersList from "./AllUsersList";
 import { useChat } from "../contexts/ChatContext";
+import SettingsModal from "./SettingsModal";
+import { useCookie } from "../hooks/useCookie";
 
 const ChatSideBar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showAllUsers, setShowAllUsers] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [searchField, setSearchField] = useState("");
+  const { removeValueFromCookie } = useCookie();
   const { socket } = useSocket();
   const { selectedUser } = useChat();
   const { currentUser } = useCurrentUser();
@@ -20,8 +23,8 @@ const ChatSideBar = () => {
   const handleLogout = () => {
     socket.emit("user_disconnected", currentUser._id);
     socket.disconnect();
-    cookie.remove("token");
-    cookie.remove("currentUserId");
+    removeValueFromCookie("token");
+    removeValueFromCookie("currentUser");
     navigate("/login");
   };
 
@@ -63,7 +66,13 @@ const ChatSideBar = () => {
               />
               {showMenu && (
                 <div className="absolute z-20 bg-white right-4 text-center cursor-pointer rounded-md shadow-md">
-                  <p className="hover:bg-secondary px-8 py-2 w-full">
+                  <p
+                    className="hover:bg-secondary px-8 py-2 w-full"
+                    onClick={() => {
+                      setShowSettings(!showSettings);
+                      setShowMenu(false);
+                    }}
+                  >
                     Settings
                   </p>
                   <p
@@ -77,6 +86,12 @@ const ChatSideBar = () => {
             </div>
           </div>
         </div>
+        {showSettings && (
+          <SettingsModal
+            isOpen={showSettings}
+            onClose={() => setShowSettings(false)}
+          />
+        )}
         <div className="search-chat flex justify-between items-center gap-2 p-4 h-16">
           <input
             className="border border-stone-400 px-4 py-2 w-full rounded-md focus:outline-none"

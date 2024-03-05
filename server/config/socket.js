@@ -47,8 +47,8 @@ export function initializeSocket(server) {
     });
 
     socket.on("user_disconnected", (user_id) => {
-      connectedUsers.delete(user_id);
       User.findById(user_id).then((user) => user.updateLastSeen());
+      connectedUsers.delete(user_id);
     });
 
     socket.on("disconnect", () => {

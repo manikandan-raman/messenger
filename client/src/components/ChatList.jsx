@@ -15,6 +15,8 @@ const ChatList = ({ searchField }) => {
     queryFn: async () => {
       return (await httpCall.get(`user/contacts/${currentUser._id}`)).data;
     },
+    retry: 1,
+    retryDelay: 100,
   });
 
   useEffect(() => {

@@ -82,8 +82,23 @@ export const addContactToUser = async (req, res, next) => {
       user.contacts = [...user.contacts, contact_id];
       await user.save();
     }
-    const addedContact = await User.findById(contact_id);
+    const addedContact = await User.findById(contact_id).select("-password");
     return res.json({ user: addedContact });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const updateUserById = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    let updateUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { ...user._doc, ...req.body },
+      { $new: true }
+    );
+    updateUser = await updateUser.save();
+    return res.json({ user: { ...user._doc, ...req.body } });
   } catch (error) {
     return next(error);
   }

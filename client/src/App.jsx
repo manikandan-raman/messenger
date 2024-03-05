@@ -6,11 +6,12 @@ import { useSocket } from "./contexts/SocketContext";
 import { useCurrentUser } from "./contexts/CurrentUserContext";
 import { Navigate, useParams } from "react-router-dom";
 import { useGetUserById } from "./hooks/useGetUserById";
-import cookie from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { EmojiProvider } from "./contexts/EmojiContext";
+import { useCookie } from "./hooks/useCookie";
 
 const App = () => {
+  const { getValueFromCookie } = useCookie();
   const { socket } = useSocket();
   const { currentUser } = useCurrentUser();
   const { setSelectedUser } = useChat();
@@ -20,7 +21,7 @@ const App = () => {
   if (!currentUser?._id) {
     return <Navigate to="/login" />;
   } else {
-    const { exp } = jwtDecode(cookie.get("token"));
+    const { exp } = jwtDecode(getValueFromCookie("token"));
     if (Date.now() >= exp * 1000) {
       return <Navigate to="/login" />;
     }

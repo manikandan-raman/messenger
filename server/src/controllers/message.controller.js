@@ -89,12 +89,12 @@ export const getAllMessagesByUser = async (req, res, next) => {
           _id: 0,
         },
       },
-      {
-        $skip: parseInt(skip),
-      },
-      {
-        $limit: parseInt(limit),
-      },
+      // {
+      //   $skip: parseInt(skip),
+      // },
+      // {
+      //   $limit: parseInt(limit),
+      // },
       {
         $sort: { date: 1 },
       },

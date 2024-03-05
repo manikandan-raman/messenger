@@ -2,15 +2,16 @@ import React from "react";
 import { httpCall } from "../utils/api-instance";
 import { Link, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
-import cookie from "js-cookie";
 import LoginIllustrationSvg from "../../public/assets/login_illustration.svg";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import { useCookie } from "../hooks/useCookie";
 
 const Login = () => {
   const { setCurrentUser } = useCurrentUser();
   const navigate = useNavigate();
+  const { setCookieValue } = useCookie();
 
   const schema = yup.object().shape({
     email: yup.string().email("enter valid email").required("enter email"),
@@ -27,12 +28,8 @@ const Login = () => {
     const response = await httpCall.post("auth/signin", { data });
     if (response.data.token) {
       setCurrentUser(response.data.user);
-      cookie.set("token", response.data.token, { secure: true });
-      cookie.set("currentUserId", response.data.user._id);
-      cookie.set(
-        "currentUserContacts",
-        JSON.stringify(response.data.user.contacts)
-      );
+      setCookieValue("token", response.data.token);
+      setCookieValue("currentUser", response.data.user, true);
       navigate("/chats");
     }
   };
