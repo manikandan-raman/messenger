@@ -9,6 +9,7 @@ import { connectDB } from "./config/db.js";
 import { initializeSocket } from "./config/socket.js";
 import logger from "./config/logger.js";
 import errorHandler from "./utils/errorHandler.js";
+import path from "path";
 
 dotenv.config();
 connectDB();
@@ -19,10 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 const server = createServer(app);
 
 initializeSocket(server);
-
-app.get("/", (req, res) => {
-  res.json({ msg: "Hello World!!!!!" });
-});
 
 app.use((req, res, next) => {
   logger.info({
@@ -38,4 +35,20 @@ app.use("/api/user", userRouter);
 app.use("/api/message", messageRouter);
 app.use(errorHandler);
 
-server.listen(5000, () => console.log("Server up and running on 5000"));
+//----------------------deployment-------------------
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "../client/build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.json({ msg: "Server is up and running." });
+  });
+}
+//----------------------deployment-------------------
+
+server.listen(process.env.PORT || 5000, () =>
+  console.log(`Server up and running on ${process.env.PORT || 5000}`)
+);

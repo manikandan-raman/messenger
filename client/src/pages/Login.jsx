@@ -38,7 +38,7 @@ const Login = () => {
   };
   return (
     <div className="w-screen h-screen grid place-items-center text-black bg-gray-200 object-center">
-      <div className="w-full md:w-3/4 flex justify-center h-full md:h-3/4 shadow-lg shadow-slate-250">
+      <div className="w-full md:w-2/3 flex justify-center h-full md:h-2/3 shadow-lg shadow-slate-250">
         <div className="basis-full md:basis-1/2 bg-primary rounded-l-md">
           <form
             autoComplete="off"
@@ -52,7 +52,7 @@ const Login = () => {
               name="email"
               id="email"
               placeholder="Enter email"
-              className="block px-4 py-2 rounded-md focus:outline-none"
+              className="block w-2/3 px-4 py-2 rounded-md focus:outline-none"
               {...register("email")}
             />
             {errors.email && (
@@ -65,14 +65,14 @@ const Login = () => {
               name="password"
               id="password"
               placeholder="Enter password"
-              className="block px-4 py-2 rounded-md focus:outline-none"
+              className="block w-2/3 px-4 py-2 rounded-md focus:outline-none"
               {...register("password")}
             />
             {errors.password && (
               <span className="text-red-500">{errors.password.message}</span>
             )}
             <button
-              className="text-primary bg-white px-4 py-2 rounded-md"
+              className="text-primary w-[20%] bg-white px-4 py-2 rounded-md"
               type="submit"
             >
               Login

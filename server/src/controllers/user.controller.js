@@ -56,8 +56,8 @@ export const getContactsById = async (req, res, next) => {
     }
     response.sort(
       (a, b) =>
-        new Date(a.last_message?.createdAt).getTime() -
-        new Date(b.last_message?.createdAt).getTime()
+        new Date(b.last_message?.createdAt).getTime() -
+        new Date(a.last_message?.createdAt).getTime()
     );
     return res.json({ user: response });
   } catch (error) {

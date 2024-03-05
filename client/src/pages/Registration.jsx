@@ -65,7 +65,7 @@ const Registration = () => {
 
   return (
     <div className="w-screen h-screen grid place-items-center text-black">
-      <div className="w-full md:w-3/4 flex justify-center h-full md:h-3/4 shadow-lg shadow-slate-250">
+      <div className="w-full md:w-2/3 flex justify-center h-full md:h-2/3 shadow-lg shadow-slate-250">
         <div className="basis-full md:basis-1/2 bg-primary rounded-l-md">
           <form
             autoComplete="off"
@@ -79,7 +79,7 @@ const Registration = () => {
               id="name"
               placeholder="Name"
               {...register("name")}
-              className="block focus:outline-none px-4 py-2 rounded-md mt-2"
+              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-2"
             />
             {errors.name && (
               <span className="text-red-500 text-left">
@@ -92,7 +92,7 @@ const Registration = () => {
               id="username"
               placeholder="Username"
               {...register("username")}
-              className="block focus:outline-none px-4 py-2 rounded-md mt-2"
+              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-2"
             />
             {errors.username && (
               <span className="text-red-500 mt-2">
@@ -105,7 +105,7 @@ const Registration = () => {
               id="email"
               placeholder="Email"
               {...register("email")}
-              className="block focus:outline-none px-4 py-2 rounded-md mt-2"
+              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-2"
             />
             {errors.email && (
               <span className="text-red-500 mt-2">{errors.email.message}</span>
@@ -116,7 +116,7 @@ const Registration = () => {
               id="password"
               placeholder="Password"
               {...register("password")}
-              className="block focus:outline-none px-4 py-2 rounded-md mt-2"
+              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-2"
             />
             {errors.password && (
               <span className="text-red-500 my-2 text-wrap">

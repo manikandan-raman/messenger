@@ -52,7 +52,7 @@ const ChatListItem = ({ user }) => {
           <p className="animate-pulse bg-gray-400 w-[55%] h-2"></p>
           <p className="animate-pulse bg-gray-400 w-[55%] h-2 mt-2"></p>
         </div>
-        <p className="animate-pulse bg-gray-400 w-[20%] h-2 basis-[20%] text-right"></p>
+        <p className="animate-pulse bg-gray-400 w-[20%] h-2 basis-[20%] shrink-0 text-right"></p>
       </div>
     </div>
   );
