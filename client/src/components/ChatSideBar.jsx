@@ -12,10 +12,13 @@ import { useCookie } from "../hooks/useCookie";
 
 const ChatSideBar = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [showAllUsers, setShowAllUsers] = useState(false);
+  const { getValueFromCookie, removeValueFromCookie } = useCookie();
+  const [showAllUsers, setShowAllUsers] = useState(() => {
+    const contacts = getValueFromCookie("currentUser").contacts;
+    return contacts ? false : true;
+  });
   const [showSettings, setShowSettings] = useState(false);
   const [searchField, setSearchField] = useState("");
-  const { removeValueFromCookie } = useCookie();
   const { socket } = useSocket();
   const { selectedUser } = useChat();
   const { currentUser } = useCurrentUser();

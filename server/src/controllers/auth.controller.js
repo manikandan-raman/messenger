@@ -3,7 +3,6 @@ import { generateToken } from "../../utils/generateToken.js";
 
 export const signUp = async (req, res, next) => {
   try {
-    console.log(req.body);
     let user = new User(req.body);
     user = await user.save();
     return res.status(201).json({ user });
@@ -23,7 +22,6 @@ export const signIn = async (req, res, next) => {
       });
     }
     user.password = null;
-
     res.json({
       user,
       token: generateToken({ id: user._id }),

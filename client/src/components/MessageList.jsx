@@ -46,10 +46,6 @@ const ChatDetailMessageList = ({
     getNextPageParam: (lastPage) => undefined,
   });
 
-  useEffect(() => {
-    console.log(searchField);
-  }, [searchField]);
-
   // useEffect(() => {
   //   if (
   //     inView &&

@@ -107,7 +107,6 @@ export const getAllMessagesByUser = async (req, res, next) => {
 
 export const updateMessageToRead = async (req, res, next) => {
   try {
-    console.log({ m: req.params.message_id });
     const message = await Message.findOneAndUpdate(
       { _id: new Types.ObjectId(req.params.message_id) },
       { $set: { is_read: true } },
