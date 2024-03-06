@@ -14,7 +14,7 @@ const ChatSideBar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { getValueFromCookie, removeValueFromCookie } = useCookie();
   const [showAllUsers, setShowAllUsers] = useState(() => {
-    const contacts = getValueFromCookie("currentUser").contacts;
+    const contacts = getValueFromCookie("currentUser", true).contacts;
     return contacts ? false : true;
   });
   const [showSettings, setShowSettings] = useState(false);
