@@ -16,10 +16,7 @@ export const signIn = async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {
-      return next({
-        ...Error(`No user found for the email: ${email}`),
-        statusCode: 400,
-      });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
     user.password = null;
     res.json({

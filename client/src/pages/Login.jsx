@@ -21,11 +21,19 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
   const handleLogin = async (data) => {
     const response = await httpCall.post("auth/signin", { data });
+    console.log(response);
+    if (response.status === 400) {
+      setError("password", {
+        type: "manual",
+        message: "invalid credentials",
+      });
+    }
     if (response.data.token) {
       setCurrentUser(response.data.user);
       setCookieValue("token", response.data.token);
@@ -34,16 +42,16 @@ const Login = () => {
     }
   };
   return (
-    <div className="w-screen h-screen grid place-items-center text-black bg-gray-200 object-center">
+    <div className="w-screen h-svh grid place-items-center text-black bg-gray-200 object-center">
       <div className="w-full md:w-2/3 flex justify-center h-full md:h-2/3 shadow-lg shadow-slate-250">
         <div className="basis-full md:basis-1/2 bg-primary rounded-l-md">
           <form
             autoComplete="off"
             method="post"
             onSubmit={handleSubmit(handleLogin)}
-            className="h-full flex flex-col justify-center items-center gap-4"
+            className="h-full flex flex-col justify-center items-center"
           >
-            <h2 className="font-medium text-4xl text-white mb-2">mChat</h2>
+            <h2 className="font-medium text-4xl text-white mb-6">mChat</h2>
             <input
               type="email"
               name="email"
@@ -53,7 +61,7 @@ const Login = () => {
               {...register("email")}
             />
             {errors.email && (
-              <span className="text-left text-red-500">
+              <span className="text-red-500 w-2/3 text-left mt-1">
                 {errors.email.message}
               </span>
             )}
@@ -62,19 +70,21 @@ const Login = () => {
               name="password"
               id="password"
               placeholder="Enter password"
-              className="block w-2/3 px-4 py-2 rounded-md focus:outline-none"
+              className="block w-2/3 px-4 py-2 rounded-md focus:outline-none mt-4"
               {...register("password")}
             />
             {errors.password && (
-              <span className="text-red-500">{errors.password.message}</span>
+              <span className="text-red-500 w-2/3 text-left mt-1">
+                {errors.password.message}
+              </span>
             )}
             <button
-              className="text-primary w-[20%] bg-white px-4 py-2 rounded-md"
+              className="text-primary w-[20%] bg-white px-4 py-2 rounded-md mt-4"
               type="submit"
             >
               Login
             </button>
-            <h4 className="text-white">
+            <h4 className="text-white mt-2">
               If you're new user? <Link to="/registration">Signup</Link>
             </h4>
           </form>

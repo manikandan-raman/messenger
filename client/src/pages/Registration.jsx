@@ -64,12 +64,12 @@ const Registration = () => {
   };
 
   return (
-    <div className="w-screen h-screen grid place-items-center text-black">
+    <div className="w-screen h-svh grid place-items-center text-black">
       <div className="w-full md:w-2/3 flex justify-center h-full md:h-2/3 shadow-lg shadow-slate-250">
         <div className="basis-full md:basis-1/2 bg-primary rounded-l-md">
           <form
             autoComplete="off"
-            className="h-full flex flex-col justify-center items-center gap-2"
+            className="h-full flex flex-col justify-center items-center"
             onSubmit={handleSubmit(handleRegistration)}
           >
             <h2 className="font-medium text-4xl text-white mb-2">mChat</h2>
@@ -82,7 +82,7 @@ const Registration = () => {
               className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-2"
             />
             {errors.name && (
-              <span className="text-red-500 text-left">
+              <span className="text-red-500 w-2/3 text-left mt-1">
                 {errors.name.message}
               </span>
             )}
@@ -92,10 +92,10 @@ const Registration = () => {
               id="username"
               placeholder="Username"
               {...register("username")}
-              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-2"
+              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-3"
             />
             {errors.username && (
-              <span className="text-red-500 mt-2">
+              <span className="text-red-500 w-2/3 text-left mt-1">
                 {errors.username.message}
               </span>
             )}
@@ -105,10 +105,12 @@ const Registration = () => {
               id="email"
               placeholder="Email"
               {...register("email")}
-              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-2"
+              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-3"
             />
             {errors.email && (
-              <span className="text-red-500 mt-2">{errors.email.message}</span>
+              <span className="text-red-500 w-2/3 text-left mt-1">
+                {errors.email.message}
+              </span>
             )}
             <input
               type="password"
@@ -116,10 +118,10 @@ const Registration = () => {
               id="password"
               placeholder="Password"
               {...register("password")}
-              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-2"
+              className="block w-2/3 focus:outline-none px-4 py-2 rounded-md mt-3"
             />
             {errors.password && (
-              <span className="text-red-500 my-2 text-wrap">
+              <span className="text-red-500 w-2/3 text-left mt-1 text-wrap">
                 {errors.password.message}
               </span>
             )}
@@ -129,7 +131,7 @@ const Registration = () => {
             >
               Register
             </button>
-            <h4 className="text-white">
+            <h4 className="text-white mt-2">
               Already have an account? <Link to="/login">Sign in</Link>
             </h4>
           </form>
