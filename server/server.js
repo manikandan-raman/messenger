@@ -14,7 +14,9 @@ import path from "path";
 dotenv.config();
 connectDB();
 const app = express();
-app.use(cors());
+app.use(
+  cors({ origin: "*", methods: ["POST", "GET", "PATCH", "PUT", "DELETE"] })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const server = createServer(app);
