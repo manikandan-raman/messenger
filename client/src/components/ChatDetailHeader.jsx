@@ -34,7 +34,7 @@ const ChatDetailHeader = ({ searchField, setSearchField }) => {
     <div className="bg-gray-50 h-16 p-2 border-b-2 border-gray-100 flex justify-between items-center gap-2">
       <div className="flex gap-2 items-center">
         <img
-          className="md:hidden size-4 rounded-fullmy-2 cursor-pointer"
+          className="md:hidden size-4 my-2 cursor-pointer"
           src={BackArrowSvg}
           alt="avatar"
           onClick={() => navigate("/chats")}
@@ -47,7 +47,7 @@ const ChatDetailHeader = ({ searchField, setSearchField }) => {
         <div>
           <p className="text-lg">{selectedUser?.name}</p>
           <p className="line-clamp-1">
-            {isOnline ? "Online" : isTyping ? "typing..." : lastSeen}
+            {isOnline ? "online" : isTyping ? "typing..." : lastSeen}
           </p>
         </div>
       </div>

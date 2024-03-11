@@ -52,7 +52,10 @@ const ChatDetailFooter = ({
 
   const sendMessage = async (event = undefined) => {
     if (event && event.type === "keydown" && event.key !== "Enter") {
-      socket.emit("is_typing", true);
+      socket.emit("is_typing", {
+        receiver_id: selectedUser?._id,
+        typing: true,
+      });
       return;
     }
     const newMessage = {
@@ -64,8 +67,8 @@ const ChatDetailFooter = ({
     };
     setShowEmoji(false);
     sendMessageMutation.mutate(newMessage);
-    // await httpCall.post("message", { data: newMessage });
     setMessage("");
+    socket.emit("is_typing", { receiver_id: selectedUser?._id, typing: false });
   };
   return (
     <div className="bg-gray-50 h-16 p-2 flex items-center gap-2">

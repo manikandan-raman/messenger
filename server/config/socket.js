@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { User } from "../src/models/user.model.js";
 import { config } from "dotenv";
+import logger from "./logger.js";
 
 config();
 export function initializeSocket(server) {
@@ -28,11 +29,11 @@ export function initializeSocket(server) {
         "online",
         JSON.stringify(Array.from(connectedUsers))
       );
-      console.log(connectedUsers);
+      logger.info(connectedUsers);
     });
 
     socket.on("new_message", (message) => {
-      console.log({
+      logger.info({
         newmessage: message,
       });
       if (connectedUsers.has(message.receiver)) {
@@ -42,8 +43,14 @@ export function initializeSocket(server) {
       }
     });
 
-    socket.on("is_typing", (is_typing) => {
-      socket.broadcast.emit("is_typing", is_typing);
+    socket.on("is_typing", ({ receiver_id, typing }) => {
+      socket.to(connectedUsers.get(receiver_id)).emit("is_typing", typing);
+      if (!typing) {
+        socket.broadcast.emit(
+          "online",
+          JSON.stringify(Array.from(connectedUsers))
+        );
+      }
     });
 
     socket.on("user_disconnected", (user_id) => {
