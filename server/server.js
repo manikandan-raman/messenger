@@ -15,7 +15,10 @@ dotenv.config();
 connectDB();
 const app = express();
 app.use(
-  cors({ origin: "*", methods: ["POST", "GET", "PATCH", "PUT", "DELETE"] })
+  cors({
+    origin: "*",
+    methods: ["OPTIONS", "POST", "GET", "PATCH", "PUT", "DELETE"],
+  })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -52,7 +55,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 //----------------------deployment-------------------
-
-server.listen(process.env.PORT || 5000, () =>
-  logger.info(`Server up and running on ${process.env.PORT || 5000}`)
-);
+const port = process.env.SERVER_PORT;
+console.log("process.env.NODE_APP_INSTANCE", process.env.NODE_APP_INSTANCE);
+server.listen(port, () => logger.info(`Server up and running on ${port}`));

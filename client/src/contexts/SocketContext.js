@@ -12,6 +12,7 @@ export const SocketProvider = ({ children }) => {
       autoConnect: false,
       reconnection: false,
       auth: { token: getValueFromCookie("token") },
+      transports: ["websocket"],
     })
   );
   const value = useMemo(() => ({ socket }), [socket]);

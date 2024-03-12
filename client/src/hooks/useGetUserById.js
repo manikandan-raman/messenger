@@ -11,5 +11,6 @@ export const useGetUserById = (user_id) => {
       );
     },
     enabled: !!user_id,
+    refetchOnWindowFocus: false,
   });
 };
