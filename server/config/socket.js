@@ -1,4 +1,6 @@
 import { Server } from "socket.io";
+import { createAdapter } from "@socket.io/redis-adapter";
+import { createClient } from "redis";
 import { User } from "../src/models/user.model.js";
 import { config } from "dotenv";
 import logger from "./logger.js";
@@ -12,6 +14,13 @@ export function initializeSocket(server) {
       origin: "*",
       methods: ["GET", "POST"],
     },
+  });
+
+  const pubClient = createClient({ url: "redis://localhost:6379" });
+  const subClient = pubClient.duplicate();
+
+  Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+    io.adapter(createAdapter(pubClient, subClient));
   });
 
   io.use((socket, next) => {
