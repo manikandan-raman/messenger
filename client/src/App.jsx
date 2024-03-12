@@ -28,10 +28,6 @@ const App = () => {
   }
 
   useEffect(() => {
-    setSelectedUser(data?.user);
-  }, [data?.user]);
-
-  useEffect(() => {
     socket.connect();
 
     socket.on("connect", () => {
@@ -56,6 +52,10 @@ const App = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    setSelectedUser(data?.user);
+  }, [data?.user]);
 
   return (
     <div className="h-svh w-screen bg-primary">
