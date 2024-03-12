@@ -17,6 +17,7 @@ const ChatList = ({ searchField }) => {
     },
     retry: 1,
     retryDelay: 100,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {

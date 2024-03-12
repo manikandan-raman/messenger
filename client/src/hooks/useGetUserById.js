@@ -5,10 +5,7 @@ export const useGetUserById = (user_id) => {
   return useQuery({
     queryKey: ["userDetail", { user_id }],
     queryFn: async () => {
-      return setTimeout(
-        async () => (await httpCall.get(`user/${user_id}`)).data,
-        500
-      );
+      return (await httpCall.get(`user/${user_id}`)).data;
     },
     enabled: !!user_id,
     refetchOnWindowFocus: false,
