@@ -27,7 +27,7 @@ const Login = () => {
 
   const handleLogin = async (data) => {
     const response = await httpCall.post("auth/signin", { data });
-    console.log(response);
+
     if (response.status === 400) {
       setError("password", {
         type: "manual",

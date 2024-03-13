@@ -10,7 +10,7 @@ export const SocketProvider = ({ children }) => {
   const [socket] = useState(
     io(SOCKET_BASE_URL, {
       autoConnect: true,
-      reconnection: false,
+      reconnection: true,
       auth: { token: getValueFromCookie("token") },
       transports: ["websocket"],
     })

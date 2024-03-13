@@ -22,7 +22,6 @@ const SettingsModal = ({ isOpen, onClose }) => {
       return (await httpCall.patch(`user/${currentUser?._id}`, { data })).data;
     },
     onSettled: (data) => {
-      console.log({ d: data.user });
       setCookieValue("currentUser", data.user, true);
       setEditStatus(false);
     },

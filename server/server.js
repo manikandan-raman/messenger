@@ -56,5 +56,4 @@ if (process.env.NODE_ENV === "production") {
 }
 //----------------------deployment-------------------
 const port = process.env.SERVER_PORT;
-console.log("process.env.NODE_APP_INSTANCE", process.env.NODE_APP_INSTANCE);
 server.listen(port, () => logger.info(`Server up and running on ${port}`));
