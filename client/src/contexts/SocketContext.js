@@ -9,7 +9,7 @@ export const SocketProvider = ({ children }) => {
   const { getValueFromCookie } = useCookie();
   const [socket] = useState(
     io(SOCKET_BASE_URL, {
-      autoConnect: false,
+      autoConnect: true,
       reconnection: false,
       auth: { token: getValueFromCookie("token") },
       transports: ["websocket"],
