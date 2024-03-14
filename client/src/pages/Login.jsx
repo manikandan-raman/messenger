@@ -6,12 +6,10 @@ import LoginIllustrationSvg from "../../public/assets/login_illustration.svg";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useCookie } from "../hooks/useCookie";
 
 const Login = () => {
   const { setCurrentUser } = useCurrentUser();
   const navigate = useNavigate();
-  const { setCookieValue } = useCookie();
 
   const schema = yup.object().shape({
     email: yup.string().email("enter valid email").required("enter email"),
@@ -36,8 +34,6 @@ const Login = () => {
     }
     if (response.data.token) {
       setCurrentUser(response.data.user);
-      setCookieValue("token", response.data.token);
-      setCookieValue("currentUser", response.data.user, true);
       navigate("/chats");
     }
   };

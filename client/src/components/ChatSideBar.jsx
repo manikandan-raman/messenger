@@ -9,6 +9,7 @@ import AllUsersList from "./AllUsersList";
 import { useChat } from "../contexts/ChatContext";
 import SettingsModal from "./SettingsModal";
 import { useCookie } from "../hooks/useCookie";
+import { httpCall } from "../utils/api-instance";
 
 const ChatSideBar = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -23,11 +24,10 @@ const ChatSideBar = () => {
   const { selectedUser } = useChat();
   const { currentUser } = useCurrentUser();
   const navigate = useNavigate();
-  const handleLogout = () => {
+  const handleLogout = async () => {
     socket.emit("user_disconnected", currentUser._id);
+    await httpCall.get("auth/signout");
     socket.disconnect();
-    removeValueFromCookie("token");
-    removeValueFromCookie("currentUser");
     navigate("/login");
   };
 

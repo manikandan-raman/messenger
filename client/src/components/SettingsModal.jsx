@@ -7,12 +7,10 @@ import TickSvg from "../../public/assets/tick.svg";
 import ClearSvg from "../../public/assets/clear.svg";
 import EditSvg from "../../public/assets/edit.svg";
 import { httpCall } from "../utils/api-instance";
-import { useCookie } from "../hooks/useCookie";
 
 const SettingsModal = ({ isOpen, onClose }) => {
   const [editStatus, setEditStatus] = useState(false);
-  const { setCookieValue } = useCookie();
-  const { currentUser } = useCurrentUser();
+  const { currentUser, setCurrentUser } = useCurrentUser();
   const [statusText, setStatusText] = useState(currentUser?.statusText);
   const statusInputRef = useRef(null);
 
@@ -22,7 +20,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
       return (await httpCall.patch(`user/${currentUser?._id}`, { data })).data;
     },
     onSettled: (data) => {
-      setCookieValue("currentUser", data.user, true);
+      setCurrentUser(data?.user);
       setEditStatus(false);
     },
   });

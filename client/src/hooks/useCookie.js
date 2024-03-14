@@ -6,17 +6,19 @@ export const useCookie = () => {
     let cookieSetOn = currentDateTime.getTime();
     cookieSetOn += 3600 * 1000;
     currentDateTime.setTime(cookieSetOn);
-    value = isObject ? JSON.stringify(value) : value;
+    value = isObject ? encodeURIComponent(JSON.stringify(value)) : value;
     cookie.set(name, value, {
       secure: true,
       expires: currentDateTime,
+      sameSite: "None",
+      path: "/",
     });
   };
 
   const getValueFromCookie = (key, isObject = false) => {
     const value = cookie.get(key);
     if (value) {
-      return isObject ? JSON.parse(value) : value;
+      return isObject ? JSON.parse(decodeURIComponent(value)) : value;
     }
     return null;
   };

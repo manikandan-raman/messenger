@@ -1,3 +1,4 @@
+import { COOKIE_OPTIONS } from "../../utils/constants.js";
 import { Message } from "../models/message.model.js";
 import { User } from "../models/user.model.js";
 
@@ -83,6 +84,11 @@ export const addContactToUser = async (req, res, next) => {
       await user.save();
     }
     const addedContact = await User.findById(contact_id).select("-password");
+    res.cookie(
+      "currentUser",
+      encodeURIComponent(JSON.stringify(addedContact)),
+      COOKIE_OPTIONS
+    );
     return res.json({ user: addedContact });
   } catch (error) {
     return next(error);
@@ -98,6 +104,11 @@ export const updateUserById = async (req, res, next) => {
       { $new: true }
     );
     updateUser = await updateUser.save();
+    res.cookie(
+      "currentUser",
+      encodeURIComponent(JSON.stringify({ ...user._doc, ...req.body })),
+      COOKIE_OPTIONS
+    );
     return res.json({ user: { ...user._doc, ...req.body } });
   } catch (error) {
     return next(error);

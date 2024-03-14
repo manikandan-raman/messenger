@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 import { generateToken } from "../../utils/generateToken.js";
+import { COOKIE_OPTIONS } from "../../utils/constants.js";
 
 export const signUp = async (req, res, next) => {
   try {
@@ -19,11 +20,26 @@ export const signIn = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
     user.password = null;
+    const token = generateToken({ id: user._id });
+    res.cookie("token", token, COOKIE_OPTIONS);
+    res.clearCookie("currentUser");
+    res.cookie(
+      "currentUser",
+      encodeURIComponent(JSON.stringify(user)),
+      COOKIE_OPTIONS
+    );
     res.json({
       user,
-      token: generateToken({ id: user._id }),
+      token,
     });
   } catch (error) {
     return next(error);
   }
+};
+
+export const signOut = async (req, res) => {
+  res.clearCookie("token", { path: "/" });
+  res.clearCookie("currentUser", { path: "/" });
+  res.clearCookie("currentUser");
+  res.json({ msg: "success" });
 };

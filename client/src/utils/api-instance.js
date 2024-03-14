@@ -16,6 +16,7 @@ export const httpCall = {
             Authorization: `Bearer ${token}`,
           }),
         },
+        withCredentials: true,
       });
     } catch (error) {
       return error.response;
@@ -29,6 +30,7 @@ export const httpCall = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
   },
   patch: async (endpoint, { data }) => {
@@ -40,6 +42,7 @@ export const httpCall = {
           Authorization: `Bearer ${token}`,
         }),
       },
+      withCredentials: true,
     });
   },
   delete: () => {},
